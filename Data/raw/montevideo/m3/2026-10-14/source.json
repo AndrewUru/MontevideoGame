@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "pipeline": "M3",
+  "declared_crs": "EPSG:32721",
+  "query_bbox_utm_m": [
+    572757.6227820638,
+    6136682.721349981,
+    573457.6227820638,
+    6137382.721349981
+  ],
+  "origin_source": "Data/processed/montevideo/plaza_independencia.json",
+  "max_features_per_layer": 2000,
+  "datasets": [
+    {
+      "role": "roads",
+      "dataset_name": "Ejes de Calles",
+      "layer": "mapstore-base:cb_v_sig_vias",
+      "organization": "Intendencia de Montevideo - Servicio de Geomatica",
+      "catalog_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/spa/catalog.search#/metadata/14264354-5ed5-4ecf-86e8-7d2188af59bc",
+      "metadata_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/14264354-5ed5-4ecf-86e8-7d2188af59bc/formatters/xml",
+      "original_file": "roads.zip",
+      "download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_vias&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-14T18:10:51.438238+00:00",
+      "sha256": "9411258be940b4e66a192559ce64a64773853d764f50cec185b365b6c0367f81",
+      "declared_crs": "EPSG:32721",
+      "original_format": "ESRI Shapefile in ZIP",
+      "license": {
+        "name": "Uso libre - Resolucion IM 640/10 (22/02/2010)",
+        "official_statement": "De uso libre según resolución 640/10 del Intendente Municipal de Montevideo de fecha 22/02/2010",
+        "evidence": "roads-metadata.xml",
+        "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/14264354-5ed5-4ecf-86e8-7d2188af59bc/formatters/xml"
+      },
+      "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Ejes de Calles",
+      "transformation_notes": [
+        "Server-side BBOX subset only; original HTTP bytes unchanged.",
+        "Clipping/triangulation are separate processed derivatives."
+      ]
+    },
+    {
+      "role": "blocks",
+      "dataset_name": "Manzanas materializadas",
+      "layer": "mapstore-base:cb_v_sig_manzanas_materializadas",
+      "organization": "Intendencia de Montevideo - Servicio de Geomatica",
+      "catalog_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/spa/catalog.search#/metadata/d652902a-4878-449a-9aab-ad5fa1865e45",
+      "metadata_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/d652902a-4878-449a-9aab-ad5fa1865e45/formatters/xml",
+      "original_file": "blocks.zip",
+      "download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_manzanas_materializadas&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-14T18:10:53.916181+00:00",
+      "sha256": "397460e1adb01006d8b72211323832c8f451d8ea536cdbe0af71ead73b8f5cf7",
+      "declared_crs": "EPSG:32721",
+      "original_format": "ESRI Shapefile in ZIP",
+      "license": {
+        "name": "Uso libre - Resolucion IM 640/10 (22/02/2010)",
+        "official_statement": "De uso libre según resolución 640/10 del Intendente Municipal de Montevideo de fecha 22/02/2010",
+        "evidence": "blocks-metadata.xml",
+        "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/d652902a-4878-449a-9aab-ad5fa1865e45/formatters/xml"
+      },
+      "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Manzanas materializadas",
+      "transformation_notes": [
+        "Server-side BBOX subset only; original HTTP bytes unchanged.",
+        "Clipping/triangulation are separate processed derivatives."
+      ]
+    }
+  ],
+  "files": {
+    "capabilities.xml": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetCapabilities",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetCapabilities",
+      "downloaded_at_utc": "2026-10-14T18:10:49.619624+00:00",
+      "sha256": "7ae116890671d69fc8febc95fde1dfb7086e3afaad4c6d7fe04c328e720d3de3",
+      "size_bytes": 185322,
+      "content_type": "application/xml",
+      "last_modified": null
+    },
+    "roads-metadata.xml": {
+      "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/14264354-5ed5-4ecf-86e8-7d2188af59bc/formatters/xml",
+      "resolved_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/14264354-5ed5-4ecf-86e8-7d2188af59bc/formatters/xml",
+      "downloaded_at_utc": "2026-10-14T18:10:50.376486+00:00",
+      "sha256": "8c65beec69d7df9fe724367e5d4dd4bf7225f990a6ac747f4978471afc1b5e6d",
+      "size_bytes": 14797,
+      "content_type": "application/xml",
+      "last_modified": null
+    },
+    "roads.zip": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_vias&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_vias&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-14T18:10:51.438238+00:00",
+      "sha256": "9411258be940b4e66a192559ce64a64773853d764f50cec185b365b6c0367f81",
+      "size_bytes": 20266,
+      "content_type": "application/zip",
+      "last_modified": null
+    },
+    "blocks-metadata.xml": {
+      "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/d652902a-4878-449a-9aab-ad5fa1865e45/formatters/xml",
+      "resolved_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/d652902a-4878-449a-9aab-ad5fa1865e45/formatters/xml",
+      "downloaded_at_utc": "2026-10-14T18:10:52.403183+00:00",
+      "sha256": "ae674ba3515c761c2dc13e63c5f43b08075f0ffc17f4e33895465762be2293cf",
+      "size_bytes": 18898,
+      "content_type": "application/xml",
+      "last_modified": null
+    },
+    "blocks.zip": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_manzanas_materializadas&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_manzanas_materializadas&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-14T18:10:53.916181+00:00",
+      "sha256": "397460e1adb01006d8b72211323832c8f451d8ea536cdbe0af71ead73b8f5cf7",
+      "size_bytes": 103145,
+      "content_type": "application/zip",
+      "last_modified": null
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "pipeline_version": "m3-1",
+  "crs": "EPSG:4326",
+  "processed_at_utc": "2026-10-14T18:10:53.916181+00:00",
+  "processing_date_policy": "Fixed to newest input acquisition UTC for deterministic rebuilds; not wall-clock run time.",
+  "origin_source": "Data/processed/montevideo/plaza_independencia.json",
+  "origin_sha256": "5899e8627994b320c462cb59323ffa7586054ca622f51ffbfa80c7d3ff231bef",
+  "origin_sha1": "2123d73f388fba2b3ddee0e084c4484e0a62ec2c",
+  "source": "Data/raw/montevideo/m3/2026-10-14/source.json",
+  "source_sha256": "d555bef5810845b972c35d67067c712d5ffb5afb8efecdb80aea2ae8ad23852e",
+  "datasets": [
+    {
+      "role": "roads",
+      "dataset_name": "Ejes de Calles",
+      "layer": "mapstore-base:cb_v_sig_vias",
+      "organization": "Intendencia de Montevideo - Servicio de Geomatica",
+      "catalog_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/spa/catalog.search#/metadata/14264354-5ed5-4ecf-86e8-7d2188af59bc",
+      "metadata_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/14264354-5ed5-4ecf-86e8-7d2188af59bc/formatters/xml",
+      "original_file": "roads.zip",
+      "download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_vias&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-14T18:10:51.438238+00:00",
+      "sha256": "9411258be940b4e66a192559ce64a64773853d764f50cec185b365b6c0367f81",
+      "declared_crs": "EPSG:32721",
+      "original_format": "ESRI Shapefile in ZIP",
+      "license": {
+        "name": "Uso libre - Resolucion IM 640/10 (22/02/2010)",
+        "official_statement": "De uso libre según resolución 640/10 del Intendente Municipal de Montevideo de fecha 22/02/2010",
+        "evidence": "roads-metadata.xml",
+        "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/14264354-5ed5-4ecf-86e8-7d2188af59bc/formatters/xml"
+      },
+      "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Ejes de Calles",
+      "transformation_notes": [
+        "Server-side BBOX subset only; original HTTP bytes unchanged.",
+        "Clipping/triangulation are separate processed derivatives."
+      ]
+    },
+    {
+      "role": "blocks",
+      "dataset_name": "Manzanas materializadas",
+      "layer": "mapstore-base:cb_v_sig_manzanas_materializadas",
+      "organization": "Intendencia de Montevideo - Servicio de Geomatica",
+      "catalog_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/spa/catalog.search#/metadata/d652902a-4878-449a-9aab-ad5fa1865e45",
+      "metadata_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/d652902a-4878-449a-9aab-ad5fa1865e45/formatters/xml",
+      "original_file": "blocks.zip",
+      "download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_manzanas_materializadas&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-14T18:10:53.916181+00:00",
+      "sha256": "397460e1adb01006d8b72211323832c8f451d8ea536cdbe0af71ead73b8f5cf7",
+      "declared_crs": "EPSG:32721",
+      "original_format": "ESRI Shapefile in ZIP",
+      "license": {
+        "name": "Uso libre - Resolucion IM 640/10 (22/02/2010)",
+        "official_statement": "De uso libre según resolución 640/10 del Intendente Municipal de Montevideo de fecha 22/02/2010",
+        "evidence": "blocks-metadata.xml",
+        "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/d652902a-4878-449a-9aab-ad5fa1865e45/formatters/xml"
+      },
+      "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Manzanas materializadas",
+      "transformation_notes": [
+        "Server-side BBOX subset only; original HTTP bytes unchanged.",
+        "Clipping/triangulation are separate processed derivatives."
+      ]
+    },
+    {
+      "role": "plaza",
+      "source": "Data/raw/montevideo/public_spaces/2026-10-14/source.json",
+      "sha256": "35fa31f9cc6a683f65dc61358db164dfaee69feb6aca02140784b4fa59dce403",
+      "license": {
+        "id": "odc-uy",
+        "name": "Licencia de DAG de Uruguay",
+        "version": "0.1",
+        "url": "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/sites/agencia-gobierno-electronico-sociedad-informacion-conocimiento/files/documentos/publicaciones/licencia_de_datos_abiertos_0.pdf",
+        "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Espacios publicos de Montevideo; Licencia de Datos Abiertos - Uruguay."
+      }
+    }
+  ],
+  "area_crs": "EPSG:32721",
+  "area_bbox_m": [
+    572757.6227820638,
+    6136682.721349981,
+    573457.6227820638,
+    6137382.721349981
+  ],
+  "max_radius_m": 500,
+  "units": "WGS84 degrees; runtime centimeters",
+  "axes": "X north, Y east, Z up",
+  "altitude": null,
+  "altitude_reference": null,
+  "development_plane_z_cm": 0,
+  "method": "BBOX query; exact square clipping in UTM; constrained triangulation preserving holes; WGS84 vertices; C++ FGeoReference at synthetic h=0 then flatten local Z=0.",
+  "mesh_precision_policy": "Preserve all source/clipped vertices and rings. Exclude only numerical triangles <=1e-6 m2 in both UTM and local projection; counts/area recorded per feature. No polygon repair/simplification.",
+  "versions": {
+    "pyproj": "3.7.2",
+    "shapely": "2.1.2",
+    "GEOS": "3.13.1",
+    "PROJ": "9.5.1"
+  },
+  "files": [
+    {
+      "path": "Data/processed/montevideo/m3/plaza_independencia.json",
+      "sha256": "718d190c543598c56a62a3d55ca9a5c823df0a442f6e4d3e4783d6acc3c00934",
+      "sha1": "2a65c3cbc53f8c0319c5ad9e8f83457d049141c8"
+    },
+    {
+      "path": "Data/processed/montevideo/m3/roads.json",
+      "sha256": "1f01da6f6ee981134d86d7e01fe6f1c81f96e221058caad83344edfc45a68fe0",
+      "sha1": "d2a65c3312bb217193758f81b257b644a4afe980"
+    },
+    {
+      "path": "Data/processed/montevideo/m3/blocks.json",
+      "sha256": "cde21229589a22f054f724b5e6d1869540873e6a8e68be9c2fa338ea00fdf8ca",
+      "sha1": "c309fcad135f32f7632a37941eacdfbcd1b79002"
+    }
+  ],
+  "counts": {
+    "polygons": 67,
+    "lines": 160,
+    "vertices": 4121,
+    "triangles": 2579
+  },
+  "expected_local_bbox_cm": [
+    -35275.56214009199,
+    -35286.77515684422,
+    35274.89479707801,
+    35290.41774079281
+  ]
+}

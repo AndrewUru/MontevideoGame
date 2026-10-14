@@ -22,6 +22,8 @@ public class MontevideoGame : ModuleRules
 
 		// SVirtualJoystick is used only by controller implementations.
 		PrivateDependencyModuleNames.Add("Slate");
+		// M3: built-in JSON contract reader and transient render/collision meshes; no plugin.
+		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "GeometryCore", "GeometryFramework" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"MontevideoGame",
