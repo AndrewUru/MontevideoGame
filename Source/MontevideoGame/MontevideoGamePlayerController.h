@@ -9,12 +9,9 @@
 class UInputMappingContext;
 class UUserWidget;
 
-/**
- *  Basic PlayerController class for a third person game
- *  Manages input mappings
- */
+/** Local player input mappings and touch UI. Future HUD, interaction and possession belong here, when approved. */
 UCLASS(abstract)
-class AMontevideoGamePlayerController : public APlayerController
+class MONTEVIDEOGAME_API AMontevideoGamePlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
@@ -42,6 +39,9 @@ protected:
 
 	/** Gameplay initialization */
 	virtual void BeginPlay() override;
+
+	/** Release the controller-owned touch UI when leaving the world. */
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;

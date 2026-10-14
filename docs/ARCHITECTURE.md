@@ -1,7 +1,7 @@
 # Arquitectura inicial
 
 ## Alcance y principios
-Arquitectura propuesta, sin implementación en M0. Unreal Engine 5 y C++ gobiernan el runtime; Python prepara datos fuera del juego. VS Code es el editor previsto. La versión menor de UE5, el compilador y su instalación quedan pendientes de verificación en M1.
+M1 consolida el runtime C++ del template Third Person en Unreal Engine 5.8.3. Python queda reservado para herramientas futuras; VS Code es el editor de trabajo. Inventario, toolchain y evidencias: [M1_BASELINE.md](M1_BASELINE.md). Los dominios futuros de este documento siguen siendo propuestas.
 
 C++ es la fuente de verdad del gameplay. Blueprints podrán configurar y presentar sistemas C++, sin contener por sí solos reglas críticas. Los límites siguientes son módulos conceptuales, no una orden de generar un módulo Unreal por cada fila. Su distribución física se decidirá conforme aparezcan necesidades reales de compilación y reutilización.
 
@@ -41,5 +41,13 @@ Geospatial declara CRS de entrada, CRS métrico de trabajo, origen local, unidad
 - Sin Cesium ni dependencias externas por ahora; se evaluarán solo frente a necesidades concretas.
 - Sin importador runtime/editor todavía. Su implementación futura separará procesamiento Python, datos de intercambio e integración de editor de Unreal.
 - Procedencia y licencias acompañan a los derivados; los binarios Unreal no se editan automáticamente.
-- Pendientes: versión UE5, extensión exacta del slice, CRS, origen, elevación, hardware objetivo, presupuestos de rendimiento y formato de persistencia.
+- Pendientes: extensión exacta del slice, CRS, origen, elevación, hardware objetivo, presupuestos de rendimiento y formato de persistencia.
 - Toda nueva dependencia deberá documentar necesidad, alternativas, licencia, mantenimiento e impacto antes de incorporarse.
+
+## Decisiones de M1
+- Un único módulo runtime `MontevideoGame`; targets Game y Editor existentes. No se crean módulos ni plugins.
+- Se evolucionan `AMontevideoGameCharacter`, `AMontevideoGamePlayerController` y `AMontevideoGameGameMode`. Mantener nombres, propiedades, funciones y subobjetos serializados evita migrar Blueprints. Los redirects `TP_ThirdPerson` de Config son parte de la compatibilidad.
+- GameMode configura en C++ los dos Blueprints existentes de Pawn y Controller mediante rutas de contenido estables. Esta dependencia de presentación es deliberada: conserva malla, animación, Input Actions, contextos y UI táctil sin reescribir assets. Los Blueprints pueden sobrescribir configuración; no implementan en exclusiva locomoción ni cámara.
+- Character conserva movimiento/cámara y concentra entrada de teclado, mando y UI en `DoMove`, `DoLook`, `DoJumpStart` y `DoJumpEnd`. Controller administra contextos locales y el ciclo de vida de la UI táctil; no se añaden sistemas de interacción/HUD/vehículos.
+- Build.cs conserva Core, CoreUObject, Engine, InputCore, EnhancedInput, AIModule, StateTreeModule, GameplayStateTreeModule y UMG. Las variantes originales consumen IA/StateTree y widgets; no son dependencias prescindibles mientras esas fuentes y assets permanezcan. Slate pasa a dependencia privada, usado por `SVirtualJoystick` en los `.cpp`. No se incorpora ninguna dependencia nueva.
+- Las variantes originales no forman parte del gameplay M1, pero siguen compilándose y se preservan para no romper el template. Su retirada o separación futura requiere revisar sus assets y referencias.

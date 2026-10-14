@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Logging/LogMacros.h"
 #include "MontevideoGameCharacter.generated.h"
 
 class USpringArmComponent;
@@ -12,14 +11,9 @@ class UCameraComponent;
 class UInputAction;
 struct FInputActionValue;
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
-
-/**
- *  A simple player-controllable third person character
- *  Implements a controllable orbiting camera
- */
+/** Third-person player: native locomotion, jump and camera. Blueprint supplies presentation and input assets. */
 UCLASS(abstract)
-class AMontevideoGameCharacter : public ACharacter
+class MONTEVIDEOGAME_API AMontevideoGameCharacter : public ACharacter
 {
 	GENERATED_BODY()
 

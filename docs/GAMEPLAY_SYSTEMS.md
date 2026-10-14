@@ -1,6 +1,10 @@
-# Sistemas de gameplay futuros
+# Sistemas de gameplay
 
-Contratos propuestos, sin declaraciones ni implementaciones C++ en M0. Los nombres son orientativos y se ajustarán al crear el proyecto. Las reglas de juego serán C++; Blueprints podrán exponer configuración y presentación.
+M1 conserva las clases reales del template: `AMontevideoGameCharacter : ACharacter`, `AMontevideoGamePlayerController : APlayerController` y `AMontevideoGameGameMode : AGameModeBase`. Sus Blueprints derivados configuran presentación y entrada. Character y Controller siguen siendo bases abstractas para esos assets; GameMode es concreto y configura Pawn/Controller. No existe una jerarquía paralela con los nombres abreviados propuestos.
+
+El personaje conserva locomoción analógica (MaxWalkSpeed 500 cm/s), salto, SpringArm de 400 cm y FollowCamera. No se añade sprint ni interacción. Controller conserva Enhanced Input y UI táctil; HUD e intercambio de posesión quedan pendientes. Véase [M1_BASELINE.md](M1_BASELINE.md).
+
+La tabla siguiente mantiene contratos futuros orientativos; no autoriza su implementación. Las reglas de juego serán C++; Blueprints podrán exponer configuración y presentación.
 
 | Clase aproximada | Responsabilidad | Límites |
 | --- | --- | --- |

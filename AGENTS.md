@@ -3,7 +3,7 @@
 ## Proyecto y estado
 Videojuego de mundo abierto ambientado en Montevideo, Uruguay. Tecnología principal: Unreal Engine 5 y C++; VS Code como editor de trabajo. Python se usa para herramientas de conversión, validación y procesamiento geográfico.
 
-El repositorio está en M0: preparación documental. Unreal Engine está instalándose. No asumir su versión menor, ruta de instalación ni toolchain. No generar `.uproject`, `.sln`, archivos internos de Unreal ni clases de gameplay durante esta fase. No descargar assets ni datos externos. No depender de Cesium. Para avanzar a otra fase se requiere aprobación explícita del usuario.
+M1 está autorizado explícitamente: consolidar la baseline C++ Third Person existente en Unreal Engine 5.8.3. Conservar las UCLASS y redirects referenciados por Blueprints; no modificar `.uasset` ni `.umap`. Descubrir la instalación y toolchain reales antes de compilar. No añadir plugins, descargar assets/datos ni implementar sistemas futuros. M2 y fases posteriores requieren nueva aprobación explícita. Ver `docs/M1_BASELINE.md` para el inventario y la validación.
 
 ## Reglas de arquitectura
 - C++ es la fuente de verdad del gameplay. Evitar lógica crítica exclusivamente en Blueprints. En fases posteriores, Blueprints pueden servir para presentación, configuración y composición sobre contratos C++.

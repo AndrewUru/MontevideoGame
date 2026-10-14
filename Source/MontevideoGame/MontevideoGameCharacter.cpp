@@ -1,14 +1,12 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MontevideoGameCharacter.h"
-#include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
-#include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "MontevideoGame.h"
 
@@ -52,23 +50,33 @@ AMontevideoGameCharacter::AMontevideoGameCharacter()
 
 void AMontevideoGameCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-		// Moving
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (!EnhancedInputComponent)
+	{
+		UE_LOG(LogMontevideoGame, Error, TEXT("%s requires an EnhancedInputComponent."), *GetNameSafe(this));
+		return;
+	}
+
+	// Keep the Blueprint-callable touch entry points and hardware input on the same C++ path.
+	if (ensureMsgf(JumpAction, TEXT("%s: JumpAction is not configured."), *GetNameSafe(this)))
+	{
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMontevideoGameCharacter::DoJumpStart);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AMontevideoGameCharacter::DoJumpEnd);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Canceled, this, &AMontevideoGameCharacter::DoJumpEnd);
+	}
+	if (ensureMsgf(MoveAction, TEXT("%s: MoveAction is not configured."), *GetNameSafe(this)))
+	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMontevideoGameCharacter::Move);
-		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AMontevideoGameCharacter::Look);
-
-		// Looking
+	}
+	if (ensureMsgf(LookAction, TEXT("%s: LookAction is not configured."), *GetNameSafe(this)))
+	{
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMontevideoGameCharacter::Look);
 	}
-	else
+	if (ensureMsgf(MouseLookAction, TEXT("%s: MouseLookAction is not configured."), *GetNameSafe(this)))
 	{
-		UE_LOG(LogMontevideoGame, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AMontevideoGameCharacter::Look);
 	}
 }
 

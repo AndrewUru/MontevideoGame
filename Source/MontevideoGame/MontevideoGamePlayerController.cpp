@@ -14,7 +14,8 @@ void AMontevideoGamePlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	// only spawn touch controls on local player controllers
-	if (IsLocalPlayerController() && ShouldUseTouchControls())
+	if (IsLocalPlayerController() && ShouldUseTouchControls() &&
+		ensureMsgf(MobileControlsWidgetClass, TEXT("%s: touch controls widget is not configured."), *GetNameSafe(this)))
 	{
 		// spawn the mobile controls widget
 		MobileControlsWidget = CreateWidget<UUserWidget>(this, MobileControlsWidgetClass);
@@ -45,7 +46,10 @@ void AMontevideoGamePlayerController::SetupInputComponent()
 		{
 			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
 			{
-				Subsystem->AddMappingContext(CurrentContext, 0);
+				if (ensureMsgf(CurrentContext, TEXT("%s: null input mapping context."), *GetNameSafe(this)))
+				{
+					Subsystem->AddMappingContext(CurrentContext, 0);
+				}
 			}
 
 			// only add these IMCs if we're not using mobile touch input
@@ -53,11 +57,25 @@ void AMontevideoGamePlayerController::SetupInputComponent()
 			{
 				for (UInputMappingContext* CurrentContext : MobileExcludedMappingContexts)
 				{
-					Subsystem->AddMappingContext(CurrentContext, 0);
+					if (ensureMsgf(CurrentContext, TEXT("%s: null input mapping context."), *GetNameSafe(this)))
+					{
+						Subsystem->AddMappingContext(CurrentContext, 0);
+					}
 				}
 			}
 		}
 	}
+}
+
+void AMontevideoGamePlayerController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (MobileControlsWidget)
+	{
+		MobileControlsWidget->RemoveFromParent();
+		MobileControlsWidget = nullptr;
+	}
+
+	Super::EndPlay(EndPlayReason);
 }
 
 bool AMontevideoGamePlayerController::ShouldUseTouchControls() const

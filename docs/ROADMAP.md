@@ -1,11 +1,11 @@
 # Roadmap
 
-Cada milestone describe trabajo futuro y una condición verificable de salida. Solo M0 está autorizado actualmente. El cierre documental de M0 no autoriza comenzar M1.
+M1 completado en el alcance autorizado de consolidación C++ el 14 de octubre de 2026: MontevideoGameEditor Win64 Development compiló con UE 5.8.3 (salida 0); las ejecuciones headless del mapa y del GameMode nativo confirmaron la composición. Véase [M1_BASELINE.md](M1_BASELINE.md) para evidencias y límites. Se recomienda repetir la comprobación visual en PIE tras estos cambios. M2 y siguientes no están autorizados.
 
 | Hito | Alcance | Criterio de salida |
 | --- | --- | --- |
 | M0 Repository | Estructura, instrucciones, arquitectura y pipeline | Archivos revisados; directorios preservados en Git; sin archivos internos de Unreal ni descargas. |
-| M1 Unreal third-person project | Verificar instalación y toolchain; crear proyecto UE5 C++ y flujo VS Code; personaje y cámara en tercera persona | Proyecto compila y abre; personaje camina y corre en mapa de prueba; registrar versión real y comandos verificados. |
+| M1 Unreal third-person project | Verificar instalación y toolchain; consolidar las tres clases C++ del proyecto Third Person existente sin modificar assets | MontevideoGameEditor compila con UE 5.8.3; conservar movimiento, cámara y salto de la baseline validada; registrar jerarquía, referencias, comandos y límites de las comprobaciones. |
 | M2 Georeferenced prototype | Elegir área, fuente y licencia; definir CRS/origen; implementar conversión mínima | Puntos de control y distancias verificados; ida/vuelta dentro de tolerancia documentada; trazabilidad del dataset. |
 | M3 Plaza Independencia blockout | Plaza Independencia y acceso acotado a Ciudad Vieja e inicio de 18 de Julio; blockout geográfico y World Partition | Recorrido a pie continuo con escala y colisión verificadas; carga/descarga comprobada; fijar presupuestos de rendimiento. |
 | M4 First driveable vehicle | Un vehículo C++, entrada/salida y posesión | Se puede entrar, conducir y salir; validar ocupación, colisión y devolución del control a pie. |

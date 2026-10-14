@@ -6,11 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "MontevideoGameGameMode.generated.h"
 
-/**
- *  Simple GameMode for a third person game
- */
-UCLASS(abstract)
-class AMontevideoGameGameMode : public AGameModeBase
+/** Main session composition. Keeps the existing Third Person Blueprint presentation classes. */
+UCLASS()
+class MONTEVIDEOGAME_API AMontevideoGameGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
