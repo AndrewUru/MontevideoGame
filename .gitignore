@@ -6,7 +6,7 @@ Saved/
 Builds/
 Dist/
 dist/
-build/
+python-build/
 # Build/ de Unreal puede contener recursos fuente: no ignorarlo completo.
 Build/**/FileOpenOrder/
 *.sln
