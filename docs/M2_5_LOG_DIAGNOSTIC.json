@@ -1,0 +1,522 @@
+{
+  "startup-no-tests.log": {
+    "sha256": "64c3589a7046b7382357d76ce70180f09c8b222cbe71a12fe04836c7421b6568",
+    "condition_failed_count": 14,
+    "diagnostic_window": [
+      {
+        "line": 1526,
+        "text": "[2026.10.14-17.47.36:132][  0]LogTemp: Error with param: UE::UnifiedErrorTest::WithInt: [Error con int -7]"
+      },
+      {
+        "line": 1527,
+        "text": "[2026.10.14-17.47.36:132][  0]LogTemp: Error with context: UE::UnifiedErrorTest::Empty: [Error vacío]"
+      },
+      {
+        "line": 1528,
+        "text": "[2026.10.14-17.47.36:133][  0]LogTemp: FError that has been invalidated: ::: []"
+      },
+      {
+        "line": 1529,
+        "text": "[2026.10.14-17.47.36:133][  0]LogTemp: FError that has been moved from: ::: []"
+      },
+      {
+        "line": 1530,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1531,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1532,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1533,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1534,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1535,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1536,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1537,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1538,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1539,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1540,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1541,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1542,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1543,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1544,
+        "text": "[2026.10.14-17.47.36:199][  0]LogEngine: Initializing Engine..."
+      },
+      {
+        "line": 1545,
+        "text": "[2026.10.14-17.47.36:200][  0]LogModuleManager: InternalLoadLibrary: 'TypedElementRuntime' ('C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-TypedElementRuntime.dll')"
+      },
+      {
+        "line": 1546,
+        "text": "[2026.10.14-17.47.36:258][  0]LogMovieScene: USequencerBakeSubsystem subsystem initialized."
+      },
+      {
+        "line": 1547,
+        "text": "[2026.10.14-17.47.36:262][  0]LogTedsSettings: UTedsSettingsEditorSubsystem::Initialize"
+      }
+    ],
+    "named_smoke_outcomes": [],
+    "error_ensure_assertion": [
+      {
+        "line": 1530,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1531,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1532,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1533,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1534,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1535,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1536,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1537,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1538,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1539,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1540,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1541,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1542,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1543,
+        "text": "[2026.10.14-17.47.36:198][  0]LogAutomationTest: Error: Condition failed"
+      }
+    ]
+  },
+  "geospatial-tests.log": {
+    "sha256": "a35551d73920290dd1619de395e5f13b79d47fbda2aeaf50a32677ec48a8df91",
+    "condition_failed_count": 14,
+    "diagnostic_window": [
+      {
+        "line": 1528,
+        "text": "[2026.10.14-17.50.04:429][  0]LogTemp: Error with param: UE::UnifiedErrorTest::WithInt: [Error con int -7]"
+      },
+      {
+        "line": 1529,
+        "text": "[2026.10.14-17.50.04:429][  0]LogTemp: Error with context: UE::UnifiedErrorTest::Empty: [Error vacío]"
+      },
+      {
+        "line": 1530,
+        "text": "[2026.10.14-17.50.04:430][  0]LogTemp: FError that has been invalidated: ::: []"
+      },
+      {
+        "line": 1531,
+        "text": "[2026.10.14-17.50.04:430][  0]LogTemp: FError that has been moved from: ::: []"
+      },
+      {
+        "line": 1532,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1533,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1534,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1535,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1536,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1537,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1538,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1539,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1540,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1541,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1542,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1543,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1544,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1545,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1546,
+        "text": "[2026.10.14-17.50.04:604][  0]LogEngine: Initializing Engine..."
+      },
+      {
+        "line": 1547,
+        "text": "[2026.10.14-17.50.04:606][  0]LogModuleManager: InternalLoadLibrary: 'TypedElementRuntime' ('C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/Win64/UnrealEditor-TypedElementRuntime.dll')"
+      },
+      {
+        "line": 1548,
+        "text": "[2026.10.14-17.50.04:732][  0]LogMovieScene: USequencerBakeSubsystem subsystem initialized."
+      },
+      {
+        "line": 1549,
+        "text": "[2026.10.14-17.50.04:744][  0]LogTedsSettings: UTedsSettingsEditorSubsystem::Initialize"
+      }
+    ],
+    "named_smoke_outcomes": [],
+    "error_ensure_assertion": [
+      {
+        "line": 1532,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1533,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1534,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1535,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1536,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1537,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1538,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1539,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1540,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1541,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1542,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1543,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1544,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1545,
+        "text": "[2026.10.14-17.50.04:600][  0]LogAutomationTest: Error: Condition failed"
+      }
+    ]
+  },
+  "engine-control.log": {
+    "sha256": "b746c1d8c5b73602a8899581d360c6d37feaac086c58aa278d0bc5deac2e23a6",
+    "condition_failed_count": 14,
+    "diagnostic_window": [
+      {
+        "line": 1774,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: FUnifiedErrorTest_DesignatedInitializers: Correcto (0.02ms)"
+      },
+      {
+        "line": 1775,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: FUnifiedErrorTest_PushErrorContext: Correcto (0.03ms)"
+      },
+      {
+        "line": 1776,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: FUnifiedErrorTest_CbObject: Correcto (0.45ms)"
+      },
+      {
+        "line": 1777,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: FUnifiedErrorTest_CreateErrorMessage: Error (0.64ms)"
+      },
+      {
+        "line": 1778,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1779,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1780,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1781,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1782,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1783,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1784,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1785,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FUnifiedErrorTest_CreateErrorMessageWithContext: Error (0.35ms)"
+      },
+      {
+        "line": 1786,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1787,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1788,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1789,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1790,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FUnifiedErrorTest_SerializeToJsonForAnalytics: Correcto (0.97ms)"
+      },
+      {
+        "line": 1791,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FUnifiedErrorTest_MoveAndCopy: Correcto (0.02ms)"
+      },
+      {
+        "line": 1792,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FUnifiedErrorTest_StringAccessors: Correcto (0.01ms)"
+      },
+      {
+        "line": 1793,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FUnifiedErrorTest_InvalidateAndIsValid: Correcto (0.05ms)"
+      },
+      {
+        "line": 1813,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FManifestTest: Correcto (0.53ms)"
+      },
+      {
+        "line": 1814,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FMetadataTest: Correcto (0.65ms)"
+      },
+      {
+        "line": 1815,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FIoStatusOrTest: Correcto (0.04ms)"
+      },
+      {
+        "line": 1816,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FStructuredLogFormatTest: Error (2.52ms)"
+      },
+      {
+        "line": 1817,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1818,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1819,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1820,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FFLinearColorSmokeTest: Correcto (0.03ms)"
+      },
+      {
+        "line": 1821,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Display: FLinearColor"
+      },
+      {
+        "line": 1822,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FFColorSmokeTest: Correcto (0.02ms)"
+      },
+      {
+        "line": 1823,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Display: FColor"
+      }
+    ],
+    "named_smoke_outcomes": [
+      "[2026.10.14-17.48.52:133][  0]LogAutomationTest: FUnifiedErrorTest_CreateErrorMessage: Error (0.64ms)",
+      "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FUnifiedErrorTest_CreateErrorMessageWithContext: Error (0.35ms)",
+      "[2026.10.14-17.48.52:134][  0]LogAutomationTest: FStructuredLogFormatTest: Error (2.52ms)"
+    ],
+    "error_ensure_assertion": [
+      {
+        "line": 856,
+        "text": "[2026.10.14-17.48.31:036][  0]LogDirectoryWatcher: Warning: Failed to begin reading directory changes for C:/Users/Andres/Desktop/Gaming/MontevideoGame/Saved/M2_5/EngineControl/Content/. Error: El sistema no puede encontrar el archivo especificado. (0x00000002)"
+      },
+      {
+        "line": 1778,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1779,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1780,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1781,
+        "text": "[2026.10.14-17.48.52:133][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1782,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1783,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1784,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1786,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1787,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1788,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1789,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1817,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1818,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      },
+      {
+        "line": 1819,
+        "text": "[2026.10.14-17.48.52:134][  0]LogAutomationTest: Error: Condition failed"
+      }
+    ]
+  },
+  "engine-control-en.log": {
+    "sha256": "30fe226ef30c7e8e16c2e31beea120dc1e5d67ea66af0bec7c97452ea5b255b2",
+    "condition_failed_count": 0,
+    "diagnostic_window": [],
+    "named_smoke_outcomes": [
+      "[2026.10.14-17.50.13:100][  0]LogAutomationTest: FUnifiedErrorTest_CreateErrorMessage: Success (0.81ms)",
+      "[2026.10.14-17.50.13:100][  0]LogAutomationTest: FUnifiedErrorTest_CreateErrorMessageWithContext: Success (0.46ms)",
+      "[2026.10.14-17.50.13:101][  0]LogAutomationTest: FStructuredLogFormatTest: Success (2.93ms)"
+    ],
+    "error_ensure_assertion": []
+  },
+  "m2_suite": {
+    "succeeded": 9,
+    "succeededWithWarnings": 0,
+    "failed": 0,
+    "notRun": 0
+  }
+}

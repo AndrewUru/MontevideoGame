@@ -1,12 +1,13 @@
 # Roadmap
 
-M1 está completado, validado manualmente por el usuario y guardado en Git. Véase [M1_BASELINE.md](M1_BASELINE.md) para la evidencia técnica original. M2 completado el 14 de octubre de 2026 en el alcance de infraestructura geoespacial: compilación UE 5.8.3 correcta, nueve tests exitosos y 753 paquetes binarios intactos. API, evidencia, tolerancias y pendientes en [M2_GEOSPATIAL.md](M2_GEOSPATIAL.md). El origen real permanece pendiente de una fuente verificada. M3 y siguientes no están autorizados.
+M1 está completado, validado manualmente por el usuario y guardado en Git. Véase [M1_BASELINE.md](M1_BASELINE.md) para la evidencia técnica original. M2 completado el 14 de octubre de 2026: compilación UE 5.8.3 correcta, nueve tests exitosos y 753 paquetes binarios intactos. API y evidencia en [M2_GEOSPATIAL.md](M2_GEOSPATIAL.md). M2.5 completado: snapshot oficial, centroide horizontal verificado, pipeline reproducible y prueba C++ del origen; la altitud permanece pendiente. Evidencia en [M2_5_DATA_PROVENANCE.md](M2_5_DATA_PROVENANCE.md). M3 y siguientes no están autorizados.
 
 | Hito | Alcance | Criterio de salida |
 | --- | --- | --- |
 | M0 Repository | Estructura, instrucciones, arquitectura y pipeline | Archivos revisados; directorios preservados en Git; sin archivos internos de Unreal ni descargas. |
 | M1 Unreal third-person project | Verificar instalación y toolchain; consolidar las tres clases C++ del proyecto Third Person existente sin modificar assets | MontevideoGameEditor compila con UE 5.8.3; conservar movimiento, cámara y salto de la baseline validada; registrar jerarquía, referencias, comandos y límites de las comprobaciones. |
 | M2 Geospatial infrastructure | WGS84 ↔ marco local Unreal; origen configurable, subsistema de GameInstance y pruebas sintéticas; sin importación visual | Compilación UE 5.8.3 correcta y pruebas geoespaciales exitosas; ejes, unidades y tolerancias documentados. Origen real y fuente/licencia pendientes si no hay datos verificados. |
+| M2.5 Official source and provenance | Diagnóstico de logs, Espacios Públicos oficial y centroide de Plaza Independencia; sin importación visual | Hashes/licencia/CRS verificados; selección única; pipeline determinista; raw y assets intactos; conversión del centroide a cero comprobada. Altitud null. |
 | M3 Plaza Independencia blockout | Plaza Independencia y acceso acotado a Ciudad Vieja e inicio de 18 de Julio; blockout geográfico y World Partition | Recorrido a pie continuo con escala y colisión verificadas; carga/descarga comprobada; fijar presupuestos de rendimiento. |
 | M4 First driveable vehicle | Un vehículo C++, entrada/salida y posesión | Se puede entrar, conducir y salir; validar ocupación, colisión y devolución del control a pie. |
 | M5 Road generation | Pipeline vial reproducible e importador de editor acotado | Generación/reimportación sin duplicados; conectividad, cruces y bordes de sectores verificados. |

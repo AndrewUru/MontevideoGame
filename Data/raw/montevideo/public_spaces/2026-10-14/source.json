@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "dataset_name": "Espacios públicos de Montevideo",
+  "organization": "Intendencia de Montevideo - Servicio de Geomatica",
+  "catalog_url": "https://catalogodatos.gub.uy/dataset/espacios-publicos-de-montevideo",
+  "catalog_id": "42fe40ad-5349-464e-94e5-62a743b8b945",
+  "resource_id": "344a4ade-1c9a-48f2-becd-6a252e874794",
+  "catalog_resource_url": "https://intgis.montevideo.gub.uy/sit/php/common/datos/generar_zip2.php?nom_tab=v_sig_espacios_publicos&tipo=gis",
+  "metadata_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/55a1f334-aada-48df-811a-ddde43ab739a/formatters/xml",
+  "download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_espacios_publicos&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8",
+  "resolved_download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_espacios_publicos&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8",
+  "downloaded_at_utc": "2026-10-14T17:55:36.723462+00:00",
+  "declared_crs": "EPSG:32721",
+  "crs_evidence": "metadata.xml / referenceSystemInfo and original ZIP .prj",
+  "original_format": "ESRI Shapefile in ZIP",
+  "original_file": "public_spaces.zip",
+  "sha256": "35fa31f9cc6a683f65dc61358db164dfaee69feb6aca02140784b4fa59dce403",
+  "license": {
+    "id": "odc-uy",
+    "name": "Licencia de DAG de Uruguay",
+    "version": "0.1",
+    "url": "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/sites/agencia-gobierno-electronico-sociedad-informacion-conocimiento/files/documentos/publicaciones/licencia_de_datos_abiertos_0.pdf",
+    "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Espacios publicos de Montevideo; Licencia de Datos Abiertos - Uruguay."
+  },
+  "catalog_modified_at": "2024-08-09T14:32:21.034418",
+  "transformation_notes": [
+    "Original HTTP bodies preserved byte-for-byte.",
+    "Download uses the SHAPE-ZIP distribution advertised by official GeoNetwork metadata; the legacy catalog resource endpoint returned a non-ZIP response during discovery.",
+    "No transformations in Data/raw; derived files belong in Data/processed."
+  ],
+  "files": {
+    "catalog.json": {
+      "url": "https://catalogodatos.gub.uy/api/3/action/package_show?id=espacios-publicos-de-montevideo",
+      "resolved_url": "https://catalogodatos.gub.uy/api/3/action/package_show?id=espacios-publicos-de-montevideo",
+      "downloaded_at_utc": "2026-10-14T17:54:59.764156+00:00",
+      "sha256": "24052c06b5a8b96198df113c883d58d354546554049c13aa6c98e6bb33e1da78",
+      "size_bytes": 3722,
+      "content_type": "application/json;charset=utf-8",
+      "last_modified": null
+    },
+    "metadata.xml": {
+      "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/55a1f334-aada-48df-811a-ddde43ab739a/formatters/xml",
+      "resolved_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/55a1f334-aada-48df-811a-ddde43ab739a/formatters/xml",
+      "downloaded_at_utc": "2026-10-14T17:55:01.804036+00:00",
+      "sha256": "4f1e2558dd3b69f47c20466eff569e909aea12afbbb54aa7d235a97825b0eea8",
+      "size_bytes": 17657,
+      "content_type": "application/xml",
+      "last_modified": null
+    },
+    "public_spaces.zip": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_espacios_publicos&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_espacios_publicos&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8",
+      "downloaded_at_utc": "2026-10-14T17:55:36.723462+00:00",
+      "sha256": "35fa31f9cc6a683f65dc61358db164dfaee69feb6aca02140784b4fa59dce403",
+      "size_bytes": 10270866,
+      "content_type": "application/zip",
+      "last_modified": null
+    },
+    "license.pdf": {
+      "url": "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/sites/agencia-gobierno-electronico-sociedad-informacion-conocimiento/files/documentos/publicaciones/licencia_de_datos_abiertos_0.pdf",
+      "resolved_url": "https://www.gub.uy/agencia-gobierno-electronico-sociedad-informacion-conocimiento/sites/agencia-gobierno-electronico-sociedad-informacion-conocimiento/files/documentos/publicaciones/licencia_de_datos_abiertos_0.pdf",
+      "downloaded_at_utc": "2026-10-14T17:55:39.938069+00:00",
+      "sha256": "ee78c585910e1222af58f2c1ccb0a21a1492e01b84cecfaf09b03c4059e54497",
+      "size_bytes": 155676,
+      "content_type": "application/pdf",
+      "last_modified": "Mon, 17 Feb 2020 17:59:50 GMT"
+    }
+  }
+}

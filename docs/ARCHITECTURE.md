@@ -43,10 +43,15 @@ M2 autoriza únicamente infraestructura geoespacial. `UGeospatialSubsystem` deri
 Se adopta WGS84 geodésico 3D (grados y altura elipsoidal en metros), conversión a ECEF y rotación a plano tangente con X norte, Y este, Z arriba; salida en centímetros y doble precisión. El dominio M2 se limita explícitamente a 20 km de distancia tridimensional al origen y alturas de -1000 a 10000 m. No equivale a terreno plano ni a una proyección cartográfica global. El origen comienza sin configurar; no se asignan coordenadas supuestas a Plaza Independencia. Cambiar origen invalida las posiciones locales calculadas anteriormente; no desplaza actores ni modifica World Partition. Detalle y pruebas en `M2_GEOSPATIAL.md`.
 
 ## Decisiones y pendientes
-- Sin Cesium ni dependencias externas por ahora; se evaluarán solo frente a necesidades concretas.
+### Decisión M2.5: herramientas de procedencia (antes de incorporar dependencias)
+El pipeline offline de Espacios Públicos utilizará Python 3.12 y `pyshp==2.3.1` (MIT) para leer Shapefile sin GDAL, `pyproj==3.7.2` (MIT, basado en PROJ) para interpretar el PRJ y transformar EPSG:32721 a WGS84 con orden de ejes explícito, y `shapely==2.1.2` (BSD-3-Clause, GEOS bajo LGPL-2.1) para validar geometrías, área, centroide y contención. Son herramientas mantenidas del ecosistema geoespacial; versiones fijadas en requirements y entorno virtual local aislado. Las transitivas `numpy==2.5.4` (BSD-3-Clause; arrays de Shapely) y `certifi==2026.7.22` (MPL-2.0; certificados de pyproj) también se fijan explícitamente. No son dependencias de Unreal ni se distribuyen con el juego. Las ruedas de pyproj y shapely incluyen sus bibliotecas nativas; conservar sus avisos si se redistribuyen herramientas.
+
+Alternativas: implementar lectores y proyecciones propios añadiría riesgo de errores de CRS/topología; GDAL/GeoPandas incorporan más dependencias de las necesarias. Se eligen estas tres bibliotecas para procesar una sola capa y conservar todas las transformaciones fuera de Data/raw. No se activa el origen en Config: el dataset aún no aporta altura fiable.
+
+- Sin Cesium ni dependencias geoespaciales externas en Unreal; las herramientas Python offline M2.5 se limitan a las justificadas arriba.
 - Sin importador runtime/editor todavía. Su implementación futura separará procesamiento Python, datos de intercambio e integración de editor de Unreal.
 - Procedencia y licencias acompañan a los derivados; los binarios Unreal no se editan automáticamente.
-- Pendientes: extensión exacta del slice, CRS, origen, elevación, hardware objetivo, presupuestos de rendimiento y formato de persistencia.
+- M2.5 fija CRS y origen horizontal en datos versionados; la prueba de desarrollo recibe el centroide verificado desde Python, sin hardcodearlo ni añadir un parser runtime. Pendientes: elevación/datum vertical, extensión exacta del slice, hardware objetivo, presupuestos de rendimiento y formato de persistencia. Ver `M2_5_DATA_PROVENANCE.md`.
 - Toda nueva dependencia deberá documentar necesidad, alternativas, licencia, mantenimiento e impacto antes de incorporarse.
 
 ## Decisiones de M1

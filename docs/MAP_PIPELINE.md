@@ -13,7 +13,7 @@ datos geográficos reales
 → World Partition
 ```
 
-Es un diseño futuro. M2 implementa solamente la conversión de coordenadas y sus pruebas; no descarga datos ni assets ni implementa el importador Unreal. No requiere Cesium. Las fuentes candidatas se evaluarán por cobertura, calidad, licencia y condiciones de redistribución antes de seleccionarse.
+La importación y generación siguen siendo futuras. M2 implementó la conversión de coordenadas; M2.5 implementa descarga de Espacios Públicos, snapshot inmutable con licencia/hashes, selección por atributos, validación y reproyección offline, y JSON del polígono/centroide de Plaza Independencia. No existe importador Unreal. Scripts, resultados y comandos en [M2_5_DATA_PROVENANCE.md](M2_5_DATA_PROVENANCE.md). No requiere Cesium. Otras fuentes se evaluarán por cobertura, calidad y licencia antes de seleccionarse.
 
 ## Etapas y entregables
 1. **Selección y descarga:** definir un área pequeña alrededor de Plaza Independencia, acceso a Ciudad Vieja e inicio de 18 de Julio. Registrar consulta, extensión y parámetros; descargar solo tras aprobación de la fase correspondiente.
@@ -28,7 +28,7 @@ Es un diseño futuro. M2 implementa solamente la conversión de coordenadas y su
 ## Manifiesto mínimo
 Cada dataset y derivado conservará: identificador y versión; proveedor y URL; fecha de obtención; licencia y atribución; restricciones de uso/redistribución; CRS y orden de ejes; unidades; referencia vertical si existe; extensión espacial; checksum de originales; herramienta, versión y parámetros de procesamiento; relación con dataset padre; esquema e informes de validación.
 
-Los manifiestos podrán usar JSON o YAML cuando se implemente el pipeline. La licencia y atribución deberán propagarse hasta el contenido distribuido según sus condiciones. Si faltan derechos o metadatos esenciales, detener la incorporación y documentar el faltante.
+M2.5 utiliza JSON (`source.json` y el derivado con trazabilidad al manifiesto). La licencia y atribución deberán propagarse hasta el contenido distribuido según sus condiciones. Si faltan derechos o metadatos esenciales, detener la incorporación y documentar el faltante.
 
 ## Contrato de coordenadas
 La única ruta permitida será:
@@ -42,7 +42,7 @@ longitud / latitud (+ altura documentada)
 
 M2 fija entrada WGS84 geodésica 3D (semántica EPSG:4979), ECEF intermedio y marco tangente local, con X norte, Y este, Z arriba y salida en centímetros. `FGeoCoordinate` nombra explícitamente latitud y longitud: los futuros adaptadores GeoJSON deberán respetar su orden longitud/latitud al construir ese tipo. Altitud omitida significa 0 m elipsoidales; no es altura del terreno ni del nivel del mar. Radio admitido: 20 km; altura: -1000 a 10000 m. La inversa y el tratamiento de errores están implementados en C++; ver [M2_GEOSPATIAL.md](M2_GEOSPATIAL.md).
 
-El origen numérico de Plaza Independencia permanece pendiente: el repositorio no contiene una fuente verificable. No se buscó ni incorporó un dataset. La configuración inicia desactivada; los tests usan coordenadas sintéticas. Antes de usar un origen real se registrarán proveedor, punto concreto, coordenadas, CRS, datum vertical, fecha, licencia y atribución. Los cambios de origen geográfico requieren recalcular posiciones; la capa no aplica rebasing de Unreal ni mueve actores.
+M2.5 obtiene el origen horizontal de Plaza Independencia del centroide de su polígono oficial, guardado en `Data/processed/montevideo/plaza_independencia.json`. La geometría original EPSG:32721 se usa para área/centroide y se transforma explícitamente a EPSG:4326 con orden longitud/latitud; la conversión C++ a local mantiene el contrato M2. Altitud y referencia vertical son null: la configuración permanece desactivada y no se asigna altura real cero. La prueba C++ usa dos alturas sintéticas exclusivamente para comprobar cancelación al origen. Los cambios de origen requieren recalcular posiciones; la capa no aplica rebasing ni mueve actores.
 
 Antes de importar, probar puntos de control conocidos, orden de ejes, distancias, ida/vuelta dentro de una tolerancia acordada y continuidad entre sectores. Registrar resultados y tolerancias en unidades físicas. Evaluar precisión lejos del origen; World Partition no corrige errores de proyección.
 

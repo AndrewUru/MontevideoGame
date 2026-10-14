@@ -1,0 +1,7 @@
+# Offline tooling only; Python 3.12. See docs/ARCHITECTURE.md for rationale/licenses.
+pyshp==2.3.1
+pyproj==3.7.2
+shapely==2.1.2
+# Transitive dependencies pinned for reproducibility (certificates / geometry arrays).
+certifi==2026.7.22
+numpy==2.5.4

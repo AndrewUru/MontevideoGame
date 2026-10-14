@@ -38,6 +38,7 @@ Build/**/FileOpenOrder/
 __pycache__/
 *.py[cod]
 .venv/
+.venv-geospatial/
 venv/
 .pytest_cache/
 .mypy_cache/
