@@ -1,0 +1,72 @@
+# Unreal Engine: productos generados, cachés y paquetes
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Builds/
+Dist/
+dist/
+build/
+# Build/ de Unreal puede contener recursos fuente: no ignorarlo completo.
+Build/**/FileOpenOrder/
+*.sln
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.VC.opendb
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.xcodeproj/
+*.xcworkspace/
+*.code-workspace
+
+# Visual Studio / VS Code: preferencias locales
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+# Solo versionar configuraciones compartidas sin rutas locales ni secretos.
+*.user
+*.userosscache
+*.sln.docstates
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+*.egg-info/
+.coverage
+.coverage.*
+htmlcov/
+
+# Temporales, logs y sistema operativo
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
+tmp/
+temp/
+
+# Secretos locales
+.env
+.env.*
+!.env.example
+
+# Content/, Config/, Source/, Scripts/, docs/ y Data/ son versionables.
+# No ignorar globalmente .uasset, .umap ni .uproject.
