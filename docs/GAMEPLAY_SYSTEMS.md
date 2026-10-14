@@ -23,7 +23,7 @@ La tabla siguiente mantiene contratos futuros orientativos; no autoriza su imple
 ## Ciclos de vida y contratos
 Los subsistemas de simulación se proponen con alcance de mundo, revisando su clase base concreta al implementarlos. El cambio o cierre de mundo libera referencias, tareas y suscripciones. El estado que deba sobrevivir se serializa a través de SaveGame, con esquema versionado, sin guardar punteros a actores.
 
-Geospatial podrá compartir una biblioteca C++ de conversión con herramientas de editor; el importador no dependerá de una instancia de gameplay para hacer sus transformaciones. Python y C++ deberán usar la misma definición documentada de referencias y validar resultados contra puntos de control comunes.
+En M2, `UGeospatialSubsystem : UGameInstanceSubsystem` conserva únicamente el marco geográfico durante la sesión, aislado por GameInstance/PIE. Es una excepción deliberada al alcance de mundo de los subsistemas de simulación: no guarda actores ni simula sectores. `FGeoReference` contiene las conversiones reutilizables sin depender del subsistema ni de una instancia de gameplay. No existe importador. Python y C++ deberán usar la misma definición documentada de referencias cuando se implemente el pipeline. Véase `M2_GEOSPATIAL.md`.
 
 Las operaciones de interacción devolverán éxito o motivo de rechazo. Vehicles es dueño de la ocupación; el controlador cambia de posesión tras la aceptación y recupera el personaje al salir. La lógica deberá impedir ocupación doble y resolver retirada o descarga del vehículo.
 

@@ -3,7 +3,7 @@
 MontevideoGame es un videojuego de mundo abierto tipo GTA ambientado en una recreación geográfica de Montevideo, Uruguay. Se desarrollará principalmente con Unreal Engine 5 y C++, con Python para el procesamiento geográfico y VS Code como editor.
 
 ## Estado actual
-M1: consolidación del proyecto C++ real creado con el template Third Person de Unreal Engine 5.8.3. El usuario validó manualmente la baseline: compilación, apertura, personaje, movimiento, cámara y salto. El inventario, comandos y resultados de verificación están en [M1_BASELINE](docs/M1_BASELINE.md). M2 no está autorizado.
+M1 está completado, validado manualmente y guardado en Git: proyecto C++ Third Person de Unreal Engine 5.8.3, movimiento, cámara y salto funcionales. Inventario en [M1_BASELINE](docs/M1_BASELINE.md). M2 añade únicamente infraestructura geoespacial WGS84 ↔ coordenadas locales Unreal, con origen configurable y pruebas sintéticas; no importa datos ni mapas. API, límites y resultados en [M2_GEOSPATIAL](docs/M2_GEOSPATIAL.md). M3 no está autorizado.
 
 ## Primer vertical slice
 Una zona pequeña y reconocible de Plaza Independencia, el acceso a Ciudad Vieja y el inicio de 18 de Julio. El primer recorrido permitirá caminar y correr con un personaje en tercera persona sobre un blockout basado en datos reales. Después se incorporará un primer vehículo conducible. Los criterios exactos de extensión y rendimiento se fijarán antes del blockout; no se construirá toda la ciudad de una vez.

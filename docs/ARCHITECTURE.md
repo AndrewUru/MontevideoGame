@@ -37,6 +37,11 @@ Separar datos persistentes, simulación abstracta y actores activos. Tráfico y 
 ## Frontera geográfica
 Geospatial declara CRS de entrada, CRS métrico de trabajo, origen local, unidades, ejes y referencia vertical. Las transformaciones se realizan con precisión adecuada antes de producir posiciones Unreal. No tratar grados como metros o centímetros. World Partition resuelve streaming; no reemplaza la conversión de coordenadas. Ver `MAP_PIPELINE.md`.
 
+### Decisión M2 (antes de implementar)
+M2 autoriza únicamente infraestructura geoespacial. `UGeospatialSubsystem` deriva de `UGameInstanceSubsystem`: el marco geográfico debe sobrevivir a cambios de mapa, sin contener actores ni simulación del mundo. Cada GameInstance/PIE tiene su propio origen. El cálculo reutilizable vive en `FGeoReference`, independiente de GameInstance, mapas y gameplay, dentro del módulo existente. No requiere nuevos módulos, plugins ni bibliotecas.
+
+Se adopta WGS84 geodésico 3D (grados y altura elipsoidal en metros), conversión a ECEF y rotación a plano tangente con X norte, Y este, Z arriba; salida en centímetros y doble precisión. El dominio M2 se limita explícitamente a 20 km de distancia tridimensional al origen y alturas de -1000 a 10000 m. No equivale a terreno plano ni a una proyección cartográfica global. El origen comienza sin configurar; no se asignan coordenadas supuestas a Plaza Independencia. Cambiar origen invalida las posiciones locales calculadas anteriormente; no desplaza actores ni modifica World Partition. Detalle y pruebas en `M2_GEOSPATIAL.md`.
+
 ## Decisiones y pendientes
 - Sin Cesium ni dependencias externas por ahora; se evaluarán solo frente a necesidades concretas.
 - Sin importador runtime/editor todavía. Su implementación futura separará procesamiento Python, datos de intercambio e integración de editor de Unreal.
