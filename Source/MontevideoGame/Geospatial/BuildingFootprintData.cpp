@@ -7,7 +7,7 @@
 #include "Misc/SecureHash.h"
 #include "HAL/PlatformTime.h"
 
-namespace
+namespace BuildingFootprintPrivate
 {
 	using FObject = TSharedPtr<FJsonObject>;
 	using GeospatialJson::Read;
@@ -26,6 +26,7 @@ uint32 FBuildingFootprintLoader::StableSeed(const FString& Id)
 
 bool FBuildingFootprintLoader::Load(const FString& Root, const FString& ManifestPath, FBuildingFootprintData& Out, FString& Error)
 {
+	using namespace BuildingFootprintPrivate;
 	FBuildingFootprintData Candidate;
 	FGeospatialBlockoutData Geometry;
 	if (!FGeospatialBlockoutLoader::Load(Root, ManifestPath, Geometry, Error, &Candidate.LoadMetrics)) { return false; }

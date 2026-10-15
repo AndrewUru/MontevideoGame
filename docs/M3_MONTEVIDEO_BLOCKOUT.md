@@ -1,6 +1,8 @@
 # M3 — blockout horizontal de Montevideo
 
-**Estado: implementación C++ y validación automática; aceptación visual pendiente del usuario. M3 no está completado. M4 no está autorizado.**
+**Estado: M3 validado visualmente por el usuario al autorizar M3.1/M3.2. M4 no está autorizado.**
+
+Este documento conserva la entrega y diagnóstico históricos sobre Entry. El mundo actual es [MVD_Prototype](M3_1_PROJECT_WORLD.md); el [proof of concept de edificios M3.2](M3_2_BUILDING_GENERATOR.md) requiere su propia aceptación visual.
 
 La escena se genera al iniciar Play sobre el mapa `Entry` ya incluido en Unreal. No se crearon ni modificaron mapas, Blueprints, materiales ni otros assets binarios. Se conserva el Third Person de M1, incluyendo su mapa, sus Blueprints, cámara, movimiento, salto y Enhanced Input. El único cambio de selección de escena está en `Config/DefaultEngine.ini`.
 
@@ -240,7 +242,7 @@ if ($LASTEXITCODE -ne 0 -or $report.failed -ne 0 -or $report.succeeded -ne 15 -o
 
 La actualización de README se limita al estado M3 en la sección española; se preservaron los cambios introductorios concurrentes del usuario. Los archivos M2.5 de datos/origen no se reescribieron.
 
-## Validación visual — pendiente del usuario
+## Validación visual M3 — procedimiento histórico ya aceptado
 
 1. Abrir `MontevideoGame.uproject` con Unreal **5.8.3**, después de la compilación. El mapa de inicio es `Entry`; antes de Play puede verse vacío. No guardar ese mapa del Engine.
 2. Pulsar **Play → Selected Viewport**. Debe aparecer el personaje Third Person dentro de la plaza verde, con manzanas azul/gris y ejes amarillos alrededor. Hacer clic en el viewport para capturar entrada. WASD, ratón y Espacio deben conservar sus funciones.

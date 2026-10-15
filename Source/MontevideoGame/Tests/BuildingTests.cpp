@@ -12,7 +12,7 @@
 #include "GameFramework/Character.h"
 
 using namespace UE::Geometry;
-namespace
+namespace BuildingTests
 {
 	constexpr EAutomationTestFlags Flags=EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter;
 	const FString Manifest=TEXT("Data/processed/montevideo/m3/buildings_manifest.json");
@@ -48,9 +48,10 @@ namespace
 	}
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsLoadTest,"Montevideo.Buildings.01DataAndDeterminism",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsLoadTest,"Montevideo.Buildings.01DataAndDeterminism",BuildingTests::Flags)
 bool FBuildingsLoadTest::RunTest(const FString&)
 {
+	using namespace BuildingTests;
 	FBuildingFootprintData A,B;
 	if (!Load(*this,A) || !Load(*this,B)) { return false; }
 	TestEqual(TEXT("Current limited POC buildings"),A.BuildingCount,9);
@@ -78,9 +79,10 @@ bool FBuildingsLoadTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsMeshTest,"Montevideo.Buildings.02ClosedMeshAndNormals",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsMeshTest,"Montevideo.Buildings.02ClosedMeshAndNormals",BuildingTests::Flags)
 bool FBuildingsMeshTest::RunTest(const FString&)
 {
+	using namespace BuildingTests;
 	FBuildingFootprintData Data;
 	if (!Load(*this,Data)) { return false; }
 	FDynamicMesh3 Mesh,Again;
@@ -119,9 +121,10 @@ bool FBuildingsMeshTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsHolesTest,"Montevideo.Buildings.03HolesConcavityMultipart",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsHolesTest,"Montevideo.Buildings.03HolesConcavityMultipart",BuildingTests::Flags)
 bool FBuildingsHolesTest::RunTest(const FString&)
 {
+	using namespace BuildingTests;
 	FBuildingFootprintData Data=Fixture(); FDynamicMesh3 Mesh; FBuildingMeshMetrics Metrics; FString Error;
 	// Reverse rings to test winding independence without changing roof triangulation.
 	for (auto& F:Data.Footprints) { for (auto& Ring:F.Geometry.Rings) { Algo::Reverse(Ring); } }
@@ -144,9 +147,10 @@ bool FBuildingsHolesTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsCollisionTest,"Montevideo.Buildings.04RuntimeCollisionAndReload",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsCollisionTest,"Montevideo.Buildings.04RuntimeCollisionAndReload",BuildingTests::Flags)
 bool FBuildingsCollisionTest::RunTest(const FString&)
 {
+	using namespace BuildingTests;
 	UWorld* World=PhysicsWorld();
 	if (!TestNotNull(TEXT("Physics world"),World)) { return false; }
 	ABuildingBlockoutActor* Actor=World->SpawnActor<ABuildingBlockoutActor>(); FString Error;
@@ -197,9 +201,10 @@ bool FBuildingsCollisionTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsInvalidTest,"Montevideo.Buildings.05RejectInvalidExtrusion",Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FBuildingsInvalidTest,"Montevideo.Buildings.05RejectInvalidExtrusion",BuildingTests::Flags)
 bool FBuildingsInvalidTest::RunTest(const FString&)
 {
+	using namespace BuildingTests;
 	auto Data=Fixture(); FDynamicMesh3 Mesh; FBuildingMeshMetrics Metrics; FString Error;
 	Data.Footprints[0].HeightMeters=0;
 	TestFalse(TEXT("Reject zero height"),FBuildingMeshGenerator::Build(Data,Mesh,Metrics,Error));

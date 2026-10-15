@@ -77,7 +77,7 @@ void ABuildingBlockoutActor::ShowBounds() const
 }
 
 #if !UE_BUILD_SHIPPING
-namespace
+namespace BuildingBlockoutCommands
 {
 	void Command(UWorld* World,int32 Action)
 	{

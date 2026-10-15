@@ -42,14 +42,16 @@ The project is intentionally developed in small, validated milestones instead of
 
 Current milestone:
 
-# M3 — Montevideo Runtime Blockout
+# M3.1 / M3.2 — Prototype world and building generator proof of concept
 
 Completed:
 M0    Repository architecture              ✅
 M1    Unreal C++ gameplay foundation       ✅
 M2    Geospatial coordinate system         ✅
 M2.5  Official data provenance pipeline    ✅
-M3    Runtime urban blockout                🚧 Visual validation
+M3    Runtime urban blockout                ✅ User visually validated
+M3.1  Dedicated MVD_Prototype world          Implemented
+M3.2  Building generator proof of concept    Technical validation; user visual acceptance pending
 
 Not started:
 M4    Driveable vehicle
@@ -82,7 +84,7 @@ Current geometry contains:
 - Debug geographic orientation
 - Collision on generated surfaces
 - Third-person traversal
-No detailed buildings, terrain elevation, traffic or vehicles are currently generated.
+M3.2 adds 9 notable buildings / 12 footprints as a procedural proof of concept, with explicitly synthetic heights. This is not complete building coverage. No terrain elevation, traffic or vehicles are generated.
 Technology stack
 Runtime
 - Unreal Engine 5.8.3
@@ -409,7 +411,7 @@ Includes checks for:
 M3 validation
 Current validation:
 M2 tests          9 / 9
-M3 tests          5 / 5
+M3 tests          6 / 6
 Python tests      5 / 5
 
 Additional checks include:
@@ -452,8 +454,8 @@ MontevideoGame.uproject
 with:
 Unreal Engine 5.8.3
 
-Current M3 testing uses:
-Engine/Maps/Entry
+The dedicated prototype world is:
+Content/Montevideo/Maps/MVD_Prototype.umap
 
 Run:
 Play → Selected Viewport
@@ -564,24 +566,13 @@ Current M3 limitations:
 - No pedestrians
 - No police
 - No missions
-- No production world map yet
-- Debug rendering is still being visually refined
+- Minimal prototype map; no production world streaming
+- M3 debug rendering visually validated; M3.2 buildings await user acceptance
 - City-scale streaming has not yet been introduced
-Next milestone
-After M3 visual validation:
-M3.1 — Dedicated Montevideo prototype world
-
-followed by:
-M4 — First driveable vehicle
-
-The first gameplay-oriented target is:
-spawn near Plaza Independencia
-        ↓
-walk through the real urban blockout
-        ↓
-enter a vehicle
-        ↓
-drive through geographically real streets
+Next validation step
+Inspect MVD_Prototype in Play and accept or reject the M3.2 building-generator proof of concept.
+"Construcciones notables" is a limited official dataset, not complete urban building coverage.
+M3.3 and M4 are not authorized.
 
 Documentation
 Detailed technical documentation:
@@ -593,6 +584,8 @@ Detailed technical documentation:
 - [M2 geospatial system](docs/M2_GEOSPATIAL.md)
 - [M2.5 data provenance](docs/M2_5_DATA_PROVENANCE.md)
 - [M3 Montevideo blockout](docs/M3_MONTEVIDEO_BLOCKOUT.md)
+- [M3.1 project world](docs/M3_1_PROJECT_WORLD.md)
+- [M3.2 building generator proof of concept](docs/M3_2_BUILDING_GENERATOR.md)
 Disclaimer
 MontevideoGame is an independent game-development and engineering prototype.
 It is not affiliated with, endorsed by, or connected to Rockstar Games or the Grand Theft Auto franchise.

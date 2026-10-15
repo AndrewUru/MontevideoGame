@@ -15,6 +15,10 @@ datos geográficos reales
 
 M2 implementó la conversión y M2.5 la procedencia de Espacios Públicos. M3 añade consultas WFS acotadas de ejes viales/manzanas, recorte y triangulación offline, JSON WGS84 y visualización C++ transitoria mediante FGeoReference y DynamicMesh. No genera assets persistentes. Plano horizontal de desarrollo Z=0, altitudes reales null; datos y comandos en [M3_MONTEVIDEO_BLOCKOUT.md](M3_MONTEVIDEO_BLOCKOUT.md). La generación urbana detallada, el terreno y el importador persistente siguen siendo futuros. No requiere Cesium.
 
+## Extensión M3.1/M3.2
+
+MVD_Prototype es un contenedor mínimo propio; la geometría sigue siendo runtime. El proof of concept de edificios usa exclusivamente Construcciones notables del WFS IM: 9 entidades/12 footprints, cobertura parcial, alturas sintéticas deterministas. Se preserva el snapshot raw, se recorta a la ventana M3 y GEOS triangula en el plano local, con control de concavidad/huecos y duplicación numérica explícita. C++ reutiliza el loader/conversor geográfico, extruye una malla agregada cerrada y añade colisión. No se genera geometría GIS persistente en el mapa. Contrato, semillas, tolerancias y límites en [M3_2_BUILDING_GENERATOR.md](M3_2_BUILDING_GENERATOR.md). No hay fuente alternativa ni expansión de cobertura implementada.
+
 ## Etapas y entregables
 1. **Selección y descarga:** definir un área pequeña alrededor de Plaza Independencia, acceso a Ciudad Vieja e inicio de 18 de Julio. Registrar consulta, extensión y parámetros; descargar solo tras aprobación de la fase correspondiente.
 2. **Originales:** guardar sin alteraciones en `Data/raw/<dataset>/<version>/`, con manifiesto de procedencia. Evitar incorporar volúmenes grandes a Git sin acordar almacenamiento y distribución.
