@@ -42,8 +42,7 @@ The project is intentionally developed in small, validated milestones instead of
 
 Current milestone:
 
-```text
-M3 — Montevideo Runtime Blockout
+# M3 — Montevideo Runtime Blockout
 
 Completed:
 M0    Repository architecture              ✅
@@ -115,7 +114,8 @@ gameplay
 rendering / debug visualization
 
 as independent concerns.
-High-level pipeline:
+
+# High-level pipeline:
 Official Montevideo GIS
         │
         ▼
@@ -148,7 +148,7 @@ Runtime procedural blockout
 Gameplay systems are not allowed to depend directly on GIS providers or external datasets.
 Geospatial coordinate system
 The geographic layer implemented in M2 uses a local tangent coordinate system.
-Conversion pipeline:
+# Conversion pipeline:
 WGS84
   │
   ▼

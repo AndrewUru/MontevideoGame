@@ -11,6 +11,10 @@
 #include "Serialization/JsonSerializer.h"
 #include "Engine/World.h"
 #include "Components/DynamicMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "DynamicMesh/DynamicMeshAttributeSet.h"
+#include "Materials/Material.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 namespace
 {
@@ -172,6 +176,75 @@ bool FM3CollisionTest::RunTest(const FString&)
 		Actor->ManifestPath = TEXT("Data/processed/montevideo/m3/missing.json");
 		TestFalse(TEXT("Missing reload rejected"), Actor->Reload(Error));
 		TestEqual(TEXT("Existing scene retained"), Actor->GetData().VertexCount, Count);
+	}
+	else { AddError(Error); }
+	World->DestroyWorld(false);
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3VisualTest, "Montevideo.M3.06RenderColors", Flags)
+bool FM3VisualTest::RunTest(const FString&)
+{
+	UWorld::InitializationValues Values;
+	Values.AllowAudioPlayback(false).CreatePhysicsScene(true).CreateNavigation(false).CreateAISystem(false).ShouldSimulatePhysics(false);
+	UWorld* World = UWorld::CreateWorld(EWorldType::Game, false, NAME_None, nullptr, true, ERHIFeatureLevel::Num, &Values);
+	if (!TestNotNull(TEXT("Isolated render-data world"), World)) { return false; }
+	AGeospatialBlockoutActor* Actor = World->SpawnActor<AGeospatialBlockoutActor>();
+	FString Error;
+	if (TestTrue(TEXT("Build debug visualization"), Actor->Reload(Error)))
+	{
+		TArray<UDynamicMeshComponent*> Meshes;
+		Actor->GetComponents(Meshes);
+		TestEqual(TEXT("Surfaces and markings"), Meshes.Num(), 2);
+		for (const UDynamicMeshComponent* Component : Meshes)
+		{
+			const auto* Mesh = Component->GetMesh();
+			const auto* Colors = Mesh->HasAttributes() ? Mesh->Attributes()->PrimaryColors() : nullptr;
+			if (!TestNotNull(TEXT("GPU color overlay exists (vertex colors alone render white)"), Colors)) { continue; }
+			TestTrue(TEXT("Unlit shader avoids sun/sky changing cartographic colors"), Component->GetMaterial(0)->GetMaterial()->GetShadingModels().HasOnlyShadingModel(MSM_Unlit));
+			TestEqual(TEXT("Verified Engine vertex-color shader"), Component->GetMaterial(0)->GetPathName(), FString(TEXT("/Engine/EngineDebugMaterials/VertexColorViewMode_ColorOnly.VertexColorViewMode_ColorOnly")));
+			bool bComplete = true, bMatches = true;
+			for (int32 Id : Mesh->TriangleIndicesItr())
+			{
+				if (!Colors->IsSetTriangle(Id)) { bComplete = false; continue; }
+				const auto Vertices = Mesh->GetTriangle(Id);
+				const auto Elements = Colors->GetTriangle(Id);
+				for (int32 Corner = 0; Corner < 3; ++Corner)
+				{
+					const FVector3f Expected = Mesh->GetVertexColor(Vertices[Corner]);
+					const FVector4f Actual = Colors->GetElement(Elements[Corner]);
+					bMatches &= Actual.Equals(FVector4f(Expected.X, Expected.Y, Expected.Z, 1), 0.0001f);
+				}
+			}
+			TestTrue(TEXT("Every rendered triangle has color data"), bComplete);
+			TestTrue(TEXT("Every corner passes its intended color to the renderer"), bMatches);
+			if (Component->GetFName() == TEXT("OfficialPolygons"))
+			{
+				int32 VertexId = 0;
+				for (const auto& Feature : Actor->GetData().Features)
+				{
+					if (!Feature.bPolygon) { continue; }
+					for (const FVector& Position : Feature.Vertices)
+					{
+						TestTrue(TEXT("Surface coordinates remain identical to GIS conversion"), FVector(Mesh->GetVertex(VertexId)).Equals(Position, 0.0001));
+						const FVector3f Color = Mesh->GetVertexColor(VertexId++);
+						TestTrue(TEXT("Plaza is green; blocks are dark blue-gray"), Feature.Role == TEXT("plaza")
+							? Color.Y > 3 * Color.X && Color.Y > 3 * Color.Z
+							: Color.Z > Color.Y && Color.Y > Color.X && Color.Z < 0.2f);
+					}
+				}
+			}
+		}
+		const auto* Floor = Actor->FindComponentByClass<UStaticMeshComponent>();
+		const auto* FloorStyle = Floor ? Cast<UMaterialInstanceDynamic>(Floor->GetMaterial(0)) : nullptr;
+		if (TestNotNull(TEXT("Runtime floor material instance"), FloorStyle))
+		{
+			TestTrue(TEXT("Floor uses unlit shader"), FloorStyle->GetMaterial()->GetShadingModels().HasOnlyShadingModel(MSM_Unlit));
+			const FLinearColor Color = FloorStyle->K2_GetVectorParameterValue(TEXT("Color"));
+			TestTrue(TEXT("Floor is dark neutral gray, never default white"), Color.R > 0 && Color.R < 0.05f && Color.R == Color.G && Color.G == Color.B);
+			TestTrue(TEXT("Reload preserves transient floor style"), Actor->Reload(Error));
+			TestTrue(TEXT("No accumulation of floor material instances on reload"), Floor->GetMaterial(0) == FloorStyle);
+		}
 	}
 	else { AddError(Error); }
 	World->DestroyWorld(false);
