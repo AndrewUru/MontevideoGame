@@ -3,7 +3,7 @@ import argparse
 import json
 import time
 from pathlib import Path
-from shapely.geometry import box
+from shapely.geometry import box, Polygon
 from process_buildings import build, SOURCE, OUTPUT
 from process_public_spaces import digest
 from process_m3 import read_shapes
@@ -20,10 +20,11 @@ def audit():
     features=json.loads(files['buildings.json'])['features']
     buildings={}; footprints=[]
     for group,f in enumerate(features):
+        polygon=Polygon([f['vertices'][i] for i in f['rings'][0]],[[f['vertices'][i] for i in r] for r in f['rings'][1:]])
         buildings[f['building_id']]={k:f[k] for k in ['source_feature_id','seed','floors','height_m','height_source']}
         buildings[f['building_id']]['name']=f['attributes']['nombre']
         footprints.append(dict(group=group,id=f['id'],source_feature_id=f['source_feature_id'],vertices=len(f['vertices']),
-                               holes=len(f['rings'])-1,roof_triangles=len(f['triangles'])//3,
+                               holes=len(f['rings'])-1,concave=polygon.convex_hull.area-polygon.area>1e-12,roof_triangles=len(f['triangles'])//3,
                                base_triangles=len(f['triangles'])//3,wall_triangles=2*sum(map(len,f['rings'])),
                                area_utm_m2=f['area_utm_m2'],area_local_m2=f['area_local_m2'],roof_area_m2=f['triangulated_area_local_m2'],
                                reprojection_area_relative_difference=f['area_local_m2']/f['area_utm_m2']-1,
