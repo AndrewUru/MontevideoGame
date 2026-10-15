@@ -36,6 +36,11 @@ void AMontevideoBlockoutGameMode::InitGame(const FString& MapName, const FString
 	Exposure->Settings.bOverride_AutoExposureMaxBrightness = true;
 	Exposure->Settings.AutoExposureMinBrightness = 0;
 	Exposure->Settings.AutoExposureMaxBrightness = 0;
+	// Local M3 debug presentation only. Keep colors stable without changing project CVars.
+	Exposure->Settings.bOverride_AutoExposureBias = true;
+	Exposure->Settings.AutoExposureBias = 0;
+	Exposure->Settings.bOverride_BloomIntensity = true;
+	Exposure->Settings.BloomIntensity = 0;
 }
 
 AActor* AMontevideoBlockoutGameMode::ChoosePlayerStart_Implementation(AController* Player)

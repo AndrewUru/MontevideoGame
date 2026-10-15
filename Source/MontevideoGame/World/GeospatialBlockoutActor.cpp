@@ -2,6 +2,8 @@
 #include "Components/DynamicMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "DynamicMesh/DynamicMesh3.h"
+#include "DynamicMesh/DynamicMeshAttributeSet.h"
+#include "DynamicMesh/MeshAttributeUtil.h"
 #include "Geospatial/GeospatialSubsystem.h"
 #include "Engine/GameInstance.h"
 #include "Engine/Engine.h"
@@ -10,6 +12,7 @@
 #include "DrawDebugHelpers.h"
 #include "HAL/IConsoleManager.h"
 #include "Materials/MaterialInterface.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Misc/Paths.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMontevideoBlockout, Log, All);
@@ -17,6 +20,33 @@ using UE::Geometry::FDynamicMesh3;
 
 namespace
 {
+	// Linear RGB, consumed directly by the built-in unlit vertex-color material.
+	const FVector3f PlazaColor(0.025f, 0.5f, 0.08f);
+	const FVector3f BlockColor(0.035f, 0.065f, 0.11f);
+	constexpr double OutlineZ = 2, RoadZ = 4, AxisZ = 8;
+
+	void PrepareRenderAttributes(FDynamicMesh3& Mesh)
+	{
+		// UDynamicMeshComponent renders overlay colors, not FDynamicMesh3 vertex colors.
+		Mesh.EnableAttributes();
+		Mesh.Attributes()->SetNumUVLayers(0);
+		UE::Geometry::CopyVertexNormalsToOverlay(Mesh, *Mesh.Attributes()->PrimaryNormals());
+		Mesh.Attributes()->EnablePrimaryColors();
+		auto* Colors = Mesh.Attributes()->PrimaryColors();
+		TArray<int32> Elements;
+		Elements.SetNum(Mesh.MaxVertexID());
+		for (int32 Id : Mesh.VertexIndicesItr())
+		{
+			const FVector3f Color = Mesh.GetVertexColor(Id);
+			Elements[Id] = Colors->AppendElement(FVector4f(Color.X, Color.Y, Color.Z, 1));
+		}
+		for (int32 Id : Mesh.TriangleIndicesItr())
+		{
+			const auto Triangle = Mesh.GetTriangle(Id);
+			Colors->SetTriangle(Id, UE::Geometry::FIndex3i(Elements[Triangle.A], Elements[Triangle.B], Elements[Triangle.C]));
+		}
+	}
+
 	int32 Vertex(FDynamicMesh3& Mesh, const FVector& Position, const FVector3f& Color)
 	{
 		const int32 Id = Mesh.AppendVertex(Position);
@@ -24,9 +54,9 @@ namespace
 		Mesh.SetVertexColor(Id, Color);
 		return Id;
 	}
-	void Stroke(FDynamicMesh3& Mesh, FVector A, FVector B, double Width, const FVector3f& Color)
+	void Stroke(FDynamicMesh3& Mesh, FVector A, FVector B, double Width, double Z, const FVector3f& Color)
 	{
-		A.Z = B.Z = 1.0; // Graphic offset only. Not street elevation.
+		A.Z = B.Z = Z; // Presentation offset only; source coordinates remain unchanged.
 		const FVector Side = FVector::CrossProduct(B-A, FVector::UpVector).GetSafeNormal() * Width * 0.5;
 		if (Side.IsNearlyZero()) { return; }
 		const int32 I = Vertex(Mesh, A+Side, Color);
@@ -57,15 +87,16 @@ bool AGeospatialBlockoutActor::Reload(FString& Error)
 	if (!GetActorTransform().Equals(FTransform::Identity)) { Error = TEXT("Blockout transform must be identity: coordinates are already centimeters"); return false; }
 	FGeospatialBlockoutData Candidate;
 	if (!FGeospatialBlockoutLoader::Load(FPaths::ProjectDir(), ManifestPath, Candidate, Error)) { return false; }
-	UMaterialInterface* Material = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/EngineDebugMaterials/VertexColorMaterial.VertexColorMaterial"));
+	UMaterialInterface* Material = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/EngineDebugMaterials/VertexColorViewMode_ColorOnly.VertexColorViewMode_ColorOnly"));
+	UMaterialInterface* FloorMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Engine/EngineDebugMaterials/DebugMeshMaterial.DebugMeshMaterial"));
 	UStaticMesh* Cube = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
-	if (!Material || !Cube) { Error = TEXT("Required built-in material/cube unavailable"); return false; }
+	if (!Material || !FloorMaterial || !Cube) { Error = TEXT("Required built-in debug materials/cube unavailable"); return false; }
 	FDynamicMesh3 Polygons(true, true, false, false), Lines(true, true, false, false);
 	for (const auto& Feature : Candidate.Features)
 	{
 		if (Feature.bPolygon)
 		{
-			const FVector3f Color = Feature.Role == TEXT("plaza") ? FVector3f(0.12f, 0.55f, 0.25f) : FVector3f(0.24f, 0.33f, 0.42f);
+			const FVector3f Color = Feature.Role == TEXT("plaza") ? PlazaColor : BlockColor;
 			const int32 Offset = Polygons.MaxVertexID();
 			for (const FVector& Position : Feature.Vertices) { Vertex(Polygons, Position, Color); }
 			for (int32 I = 0; I < Feature.Triangles.Num(); I += 3)
@@ -80,7 +111,7 @@ bool AGeospatialBlockoutActor::Reload(FString& Error)
 			{
 				for (int32 I = 0; I < Ring.Num(); ++I)
 				{
-					Stroke(Lines, Feature.Vertices[Ring[I]], Feature.Vertices[Ring[(I+1)%Ring.Num()]], 15, FVector3f(0.85f,0.9f,0.9f));
+					Stroke(Lines, Feature.Vertices[Ring[I]], Feature.Vertices[Ring[(I+1)%Ring.Num()]], 30, OutlineZ, FVector3f(0.12f,0.18f,0.24f));
 				}
 			}
 		}
@@ -88,28 +119,39 @@ bool AGeospatialBlockoutActor::Reload(FString& Error)
 		{
 			for (int32 I = 1; I < Feature.Vertices.Num(); ++I)
 			{
-				// 30 cm is a cartographic stroke width, NOT a measured road width.
-				Stroke(Lines, Feature.Vertices[I-1], Feature.Vertices[I], 30, FVector3f(1.0f,0.65f,0.04f));
+				// 2 m is a debug stroke width for aerial readability, NOT a measured road width.
+				Stroke(Lines, Feature.Vertices[I-1], Feature.Vertices[I], 200, RoadZ, FVector3f(1.0f,0.45f,0.015f));
 			}
 		}
 	}
 	// Development positions/axes: explicit non-cartographic 20 m reference marks.
 	for (const auto& Direction : {FVector(2000,0,0), FVector(0,2000,0)})
 	{
-		const FVector3f Color = Direction.X > 0 ? FVector3f(1,0.05f,0.05f) : FVector3f(0.05f,1,0.05f);
-		Stroke(Lines, FVector::ZeroVector, Direction, 25, Color);
+		const FVector3f Color = Direction.X > 0 ? FVector3f(0.9f,0.015f,0.01f) : FVector3f(0.05f,1,0.04f);
+		Stroke(Lines, FVector::ZeroVector, Direction, 100, AxisZ, Color);
 		const FVector Unit = Direction.GetSafeNormal();
 		const FVector Side = FVector::CrossProduct(Unit,FVector::UpVector);
-		Stroke(Lines, Direction, Direction-Unit*200+Side*120, 25, Color);
-		Stroke(Lines, Direction, Direction-Unit*200-Side*120, 25, Color);
+		Stroke(Lines, Direction, Direction-Unit*300+Side*200, 100, AxisZ, Color);
+		Stroke(Lines, Direction, Direction-Unit*300-Side*200, 100, AxisZ, Color);
 	}
+	PrepareRenderAttributes(Polygons);
+	PrepareRenderAttributes(Lines);
 	Surface->SetMaterial(0, Material);
 	Markings->SetMaterial(0, Material);
+	Surface->SetVertexColorSpaceTransformMode(EDynamicMeshVertexColorTransformMode::NoTransform);
+	Markings->SetVertexColorSpaceTransformMode(EDynamicMeshVertexColorTransformMode::NoTransform);
 	Surface->SetMesh(MoveTemp(Polygons));
 	Surface->SetComplexAsSimpleCollisionEnabled(true, true);
 	Markings->SetMesh(MoveTemp(Lines));
 	// Neutral engineering support under the AOI, not inferred terrain or land cover.
 	DevelopmentFloor->SetStaticMesh(Cube);
+	UMaterialInstanceDynamic* FloorStyle = Cast<UMaterialInstanceDynamic>(DevelopmentFloor->GetMaterial(0));
+	if (!FloorStyle || FloorStyle->Parent != FloorMaterial)
+	{
+		FloorStyle = UMaterialInstanceDynamic::Create(FloorMaterial, this);
+	}
+	FloorStyle->SetVectorParameterValue(TEXT("Color"), FLinearColor(0.018f, 0.018f, 0.018f));
+	DevelopmentFloor->SetMaterial(0, FloorStyle);
 	const FVector Size = Candidate.Bounds.GetSize();
 	const FVector Center = Candidate.Bounds.GetCenter();
 	DevelopmentFloor->SetRelativeLocation(FVector(Center.X, Center.Y, -50.5));
