@@ -1,5 +1,6 @@
 #include "World/MontevideoBlockoutGameMode.h"
 #include "World/GeospatialBlockoutActor.h"
+#include "World/BuildingBlockoutActor.h"
 #include "Engine/DirectionalLight.h"
 #include "Engine/SkyLight.h"
 #include "Components/SkyAtmosphereComponent.h"
@@ -16,6 +17,12 @@ void AMontevideoBlockoutGameMode::InitGame(const FString& MapName, const FString
 	if (!Blockout || !Blockout->Reload(ErrorMessage))
 	{
 		UE_LOG(LogTemp, Error, TEXT("M3 initialization failed: %s"), *ErrorMessage);
+		return;
+	}
+	ABuildingBlockoutActor* Buildings = GetWorld()->SpawnActor<ABuildingBlockoutActor>();
+	if (!Buildings || !Buildings->Reload(ErrorMessage))
+	{
+		UE_LOG(LogTemp, Error, TEXT("M3.2 building initialization failed: %s"), *ErrorMessage);
 		return;
 	}
 	// The verified origin lies inside the plaza. Capsule center starts 120 cm above its development surface.
