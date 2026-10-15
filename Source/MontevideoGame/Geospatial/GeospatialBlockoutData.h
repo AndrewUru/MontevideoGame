@@ -29,10 +29,16 @@ struct FGeospatialBlockoutData
 	double MaxRadiusMeters = 0;
 };
 
+struct FGeospatialLoadMetrics
+{
+	double JsonMilliseconds = 0;
+	double ConversionMilliseconds = 0;
+};
+
 /** Strict offline contract reader; replaces OutData only on success. No actors or assets. */
 class MONTEVIDEOGAME_API FGeospatialBlockoutLoader
 {
 public:
 	static bool Load(const FString& ProjectDirectory, const FString& ManifestRelativePath,
-		FGeospatialBlockoutData& OutData, FString& OutError);
+		FGeospatialBlockoutData& OutData, FString& OutError, FGeospatialLoadMetrics* Metrics = nullptr);
 };

@@ -5,6 +5,7 @@
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
 #include "Misc/SecureHash.h"
+#include "HAL/PlatformTime.h"
 
 namespace
 {
@@ -32,8 +33,9 @@ namespace
 		const TSharedPtr<FJsonValue>* Value = Object ? Object->Values.Find(Key) : nullptr;
 		return Value && (*Value)->IsNull();
 	}
-	bool Read(const FString& Root, const FString& RelativePath, const FString& ExpectedSha1, FObject& Out, FString& Error)
+	bool Read(const FString& Root, const FString& RelativePath, const FString& ExpectedSha1, FObject& Out, FString& Error, FGeospatialLoadMetrics* Metrics)
 	{
+		const double Start = FPlatformTime::Seconds();
 		FString Path = FPaths::ConvertRelativePathToFull(FPaths::Combine(Root, RelativePath));
 		FPaths::CollapseRelativeDirectories(Path);
 		if (!FPaths::IsRelative(RelativePath) || !FPaths::IsUnderDirectory(Path, FPaths::ConvertRelativePathToFull(Root)))
@@ -57,6 +59,7 @@ namespace
 		{
 			Error = TEXT("Malformed JSON: ") + RelativePath; return false;
 		}
+		if (Metrics) { Metrics->JsonMilliseconds += (FPlatformTime::Seconds()-Start)*1000; }
 		return true;
 	}
 	bool Indices(const FValues& Values, int32 VertexCount, TArray<int32>& Out)
@@ -83,11 +86,12 @@ namespace
 	}
 }
 
-bool FGeospatialBlockoutLoader::Load(const FString& Root, const FString& ManifestPath, FGeospatialBlockoutData& OutData, FString& Error)
+bool FGeospatialBlockoutLoader::Load(const FString& Root, const FString& ManifestPath, FGeospatialBlockoutData& OutData, FString& Error, FGeospatialLoadMetrics* Metrics)
 {
+	if (Metrics) { *Metrics = {}; }
 	Error = TEXT("Invalid M3 manifest schema/units/CRS");
 	FObject Manifest;
-	if (!Read(Root, ManifestPath, TEXT(""), Manifest, Error)) { return false; }
+	if (!Read(Root, ManifestPath, TEXT(""), Manifest, Error, Metrics)) { return false; }
 	double Version, Plane;
 	FString CRS, OriginPath, OriginHash, Axes;
 	FGeospatialBlockoutData Data;
@@ -98,7 +102,7 @@ bool FGeospatialBlockoutLoader::Load(const FString& Root, const FString& Manifes
 		|| !Number(Manifest, TEXT("max_radius_m"), Data.MaxRadiusMeters) || Data.MaxRadiusMeters <= 0 || Data.MaxRadiusMeters > 500
 		|| !Text(Manifest, TEXT("origin_source"), OriginPath) || !Text(Manifest, TEXT("origin_sha1"), OriginHash)) { return false; }
 	FObject Origin;
-	if (!Read(Root, OriginPath, OriginHash, Origin, Error)) { return false; }
+	if (!Read(Root, OriginPath, OriginHash, Origin, Error, Metrics)) { return false; }
 	const FObject* Center;
 	Error = TEXT("Invalid horizontal origin; altitude must remain null");
 	if (!Origin->TryGetObjectField(TEXT("centroid_wgs84"), Center) || !IsNull(Origin, TEXT("altitude")) || !IsNull(Origin, TEXT("altitude_reference"))
@@ -125,7 +129,7 @@ bool FGeospatialBlockoutLoader::Load(const FString& Root, const FString& Manifes
 		const FObject File = ObjectValue(FileValue);
 		FString Path, Hash;
 		FObject Layer;
-		if (!Text(File, TEXT("path"), Path) || !Text(File, TEXT("sha1"), Hash) || !Read(Root, Path, Hash, Layer, Error)) { return false; }
+		if (!Text(File, TEXT("path"), Path) || !Text(File, TEXT("sha1"), Hash) || !Read(Root, Path, Hash, Layer, Error, Metrics)) { return false; }
 		const FValues* Features;
 		if (!Number(Layer, TEXT("schema_version"), Version) || Version != 1 || !Text(Layer, TEXT("crs"), CRS) || CRS != TEXT("EPSG:4326")
 			|| !Array(Layer, TEXT("features"), Features) || Features->IsEmpty() || Features->Num() > 2000) { return false; }
@@ -146,8 +150,10 @@ bool FGeospatialBlockoutLoader::Load(const FString& Root, const FString& Manifes
 				const FValues* XY;
 				double Longitude, Latitude;
 				if (!Vertex->TryGetArray(XY) || XY->Num() != 2 || !(*XY)[0]->TryGetNumber(Longitude) || !(*XY)[1]->TryGetNumber(Latitude)) { return false; }
+				const double ConvertStart = FPlatformTime::Seconds();
 				FLocalGeoCoordinate Local;
 				if (Reference.GeographicToLocal(FGeoCoordinate(Latitude, Longitude, 0), Local) != EGeoConversionResult::Success) { return false; }
+				if (Metrics) { Metrics->ConversionMilliseconds += (FPlatformTime::Seconds()-ConvertStart)*1000; }
 				Local.Centimeters.Z = 0;
 				if (Local.Centimeters.SizeSquared2D() > FMath::Square(Data.MaxRadiusMeters * 100)) { Error = TEXT("Geometry exceeds M3 radius"); return false; }
 				Feature.Vertices.Add(Local.Centimeters);

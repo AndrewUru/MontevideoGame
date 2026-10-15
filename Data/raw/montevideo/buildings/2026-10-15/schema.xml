@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:gml="http://www.opengis.net/gml" xmlns:mapstore-base="https://sig.imm.gub.uy/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://sig.imm.gub.uy/">
+  <xsd:import namespace="http://www.opengis.net/gml" schemaLocation="https://montevideo.gub.uy/app/geoserver/schemas/gml/3.1.1/base/gml.xsd"/>
+  <xsd:complexType name="cb_v_sig_construcciones_notablesType">
+    <xsd:complexContent>
+      <xsd:extension base="gml:AbstractFeatureType">
+        <xsd:sequence>
+          <xsd:element maxOccurs="1" minOccurs="0" name="gid" nillable="true" type="xsd:long"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="estado" nillable="true" type="xsd:int"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="nombre" nillable="true" type="xsd:string"/>
+          <xsd:element maxOccurs="1" minOccurs="0" name="the_geom" nillable="true" type="gml:MultiPolygonPropertyType"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="cb_v_sig_construcciones_notables" substitutionGroup="gml:_Feature" type="mapstore-base:cb_v_sig_construcciones_notablesType"/>
+</xsd:schema>

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "pipeline": "M3.2",
+  "dataset_name": "Construcciones notables",
+  "layer": "mapstore-base:cb_v_sig_construcciones_notables",
+  "organization": "Intendencia de Montevideo - Servicio de Geomatica",
+  "catalog_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/spa/catalog.search#/metadata/939d2fd2-3b25-4b08-b2e1-753b9e7cd9ee",
+  "metadata_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/939d2fd2-3b25-4b08-b2e1-753b9e7cd9ee/formatters/xml",
+  "download_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_construcciones_notables&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+  "downloaded_at_utc": "2026-10-15T08:12:39.628135+00:00",
+  "declared_crs": "EPSG:32721",
+  "original_format": "ESRI Shapefile in ZIP",
+  "original_file": "buildings.zip",
+  "query_bbox_utm_m": [
+    572757.6227820638,
+    6136682.721349981,
+    573457.6227820638,
+    6137382.721349981
+  ],
+  "max_features": 2000,
+  "feature_count": 10,
+  "attributes": [
+    "estado",
+    "gid",
+    "nombre"
+  ],
+  "license": {
+    "name": "Uso libre - Resolucion IM 640/10 (22/02/2010)",
+    "official_statement": "De uso libre según resolución 640/10 del Intendente Municipal de Montevideo de fecha 22/02/2010",
+    "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/939d2fd2-3b25-4b08-b2e1-753b9e7cd9ee/formatters/xml"
+  },
+  "attribution": "Intendencia de Montevideo, Servicio de Geomatica; Construcciones notables.",
+  "coverage": "Selected notable building silhouettes digitized from the December 2021 orthomosaic; NOT exhaustive building coverage.",
+  "height_policy": "No official height/floors fields. Synthetic development height only.",
+  "transformations": [
+    "Server-side 700 x 700 m BBOX filter only. HTTP bodies preserved byte-for-byte."
+  ],
+  "files": {
+    "capabilities.xml": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetCapabilities",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetCapabilities",
+      "downloaded_at_utc": "2026-10-15T08:12:37.583950+00:00",
+      "sha256": "7ae116890671d69fc8febc95fde1dfb7086e3afaad4c6d7fe04c328e720d3de3",
+      "size_bytes": 185322,
+      "content_type": "application/xml",
+      "last_modified": null
+    },
+    "metadata.xml": {
+      "url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/939d2fd2-3b25-4b08-b2e1-753b9e7cd9ee/formatters/xml",
+      "resolved_url": "https://geoweb.montevideo.gub.uy/geonetwork/srv/api/records/939d2fd2-3b25-4b08-b2e1-753b9e7cd9ee/formatters/xml",
+      "downloaded_at_utc": "2026-10-15T08:12:38.366850+00:00",
+      "sha256": "e1f8ef24d8c42c6c84829b53dde46463a0131054e477f9f6ea848efeb1ea7de5",
+      "size_bytes": 14668,
+      "content_type": "application/xml",
+      "last_modified": null
+    },
+    "schema.xml": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=DescribeFeatureType&typeName=mapstore-base%3Acb_v_sig_construcciones_notables",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=DescribeFeatureType&typeName=mapstore-base%3Acb_v_sig_construcciones_notables",
+      "downloaded_at_utc": "2026-10-15T08:12:40.345936+00:00",
+      "sha256": "a19e986c01f2d2936b810bbf0635ab5464d1e1db7e2c677310b09dd97f16988c",
+      "size_bytes": 1234,
+      "content_type": "text/xml; subtype=gml/3.1.1",
+      "last_modified": null
+    },
+    "buildings.zip": {
+      "url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_construcciones_notables&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "resolved_url": "https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=mapstore-base%3Acb_v_sig_construcciones_notables&outputFormat=SHAPE-ZIP&format_options=charset%3AUTF-8&bbox=572757.6227820638%2C6136682.721349981%2C573457.6227820638%2C6137382.721349981%2CEPSG%3A32721&srsName=EPSG%3A32721&maxFeatures=2000",
+      "downloaded_at_utc": "2026-10-15T08:12:39.628135+00:00",
+      "sha256": "f6ce8f850b60ff282198338be39222fc6a04d280001f59b10e5a9a16ec64db05",
+      "size_bytes": 97081,
+      "content_type": "application/zip",
+      "last_modified": null
+    }
+  }
+}
