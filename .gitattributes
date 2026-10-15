@@ -1,2 +1,7 @@
 *.uasset filter=lfs diff=lfs merge=lfs -text
 *.umap filter=lfs diff=lfs merge=lfs -text
+
+# Raw HTTP bodies and provenance snapshots must survive checkout byte-for-byte.
+Data/raw/** -text
+# Deterministic derived JSON checksums require LF on Windows as well as Unix.
+Data/processed/** text eol=lf
