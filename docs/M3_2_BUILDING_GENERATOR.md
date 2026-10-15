@@ -73,7 +73,28 @@ La extrusión crea cubierta, base y paredes para todos los anillos. Normaliza ex
 
 Un **ABuildingBlockoutActor**, un **UDynamicMeshComponent**. No se crean actores por edificio ni por pared. `TriangleGroup` corresponde al índice del footprint en `GetData().Footprints`; desde ahí se recuperan `id`, `building_id`, `source_feature_id`, seed y procedencia. Varias partes de un mismo edificio conservan la misma identidad de origen.
 
+Malla agregada: **1.052 vértices de posición, 2.076 triángulos**, distribuidos en **1.052 de paredes, 512 de cubiertas y 512 de bases**, con **12 grupos**. La planta tiene 526 vértices; los overlays de normales y colores tienen elementos adicionales por esquina y se incluyen en la estimación de payload. La malla mantiene los cinco huecos del lote (cuatro en Cabildo y uno en Ministerio de Trabajo).
+
 Se reutiliza `/Engine/EngineDebugMaterials/VertexColorViewMode_ColorOnly.VertexColorViewMode_ColorOnly`, unlit. Colores RGBA llegan por PrimaryColors; cubierta beige lineal (0,55; 0,49; 0,38), paredes con un factor según orientación para lectura volumétrica. Es sombreado esquemático, no materiales ni iluminación artísticos. No hay assets de materiales nuevos.
+
+### Auditoría por footprint
+
+La identidad completa de cada grupo es `layer:gid:parte`; una misma identidad `layer:gid` reúne las partes del edificio. Los índices se reconstruyen determinísticamente para este lote; no son IDs persistentes entre futuras versiones del dataset. Área local y cubierta coinciden dentro de 1e-6 m²; la columna redondea a seis decimales. Exterior y huecos se orientan para normales exteriores al extruir.
+
+| Grupo | gid / parte | Vértices planta | Huecos | Cóncavo | Área UTM m² | Área local/cubierta m² | Techo/base tri. | Pared tri. |
+| ---: | --- | ---: | ---: | --- | ---: | ---: | ---: | ---: |
+| 0 | 106187939 / 0 | 243 | 0 | sí | 4528.427762 | 4531.457333 | 241 | 486 |
+| 1 | 106187941 / 0 | 20 | 4 | sí | 1456.267080 | 1457.242138 | 26 | 40 |
+| 2 | 106187942 / 0 | 18 | 0 | sí | 445.193203 | 445.491391 | 16 | 36 |
+| 3 | 106187965 / 0 | 6 | 0 | no | 1212.116266 | 1212.926783 | 4 | 12 |
+| 4 | 106187965 / 1 | 18 | 0 | sí | 2049.510265 | 2050.880818 | 16 | 36 |
+| 5 | 106188003 / 0 | 8 | 0 | sí | 577.788695 | 578.175279 | 6 | 16 |
+| 6 | 106188004 / 0 | 3 | 0 | no | 8.301641 | 8.307201 | 1 | 6 |
+| 7 | 106188004 / 1 | 5 | 0 | sí | 197.330877 | 197.463053 | 3 | 10 |
+| 8 | 106188012 / 0 | 4 | 0 | no | 678.866984 | 679.321701 | 2 | 8 |
+| 9 | 106188013 / 0 | 7 | 0 | sí | 794.586913 | 795.118799 | 5 | 14 |
+| 10 | 106188013 / 1 | 10 | 1 | sí | 720.041476 | 720.523199 | 10 | 20 |
+| 11 | 106188055 / 0 | 184 | 0 | sí | 1051.056209 | 1051.758826 | 182 | 368 |
 
 ## Colisión y herramientas
 
@@ -99,6 +120,7 @@ La memoria informada es una **estimación de payload CPU** de posiciones, índic
 
 - Cobertura parcial de construcciones notables: no completa manzanas ni implica calles flanqueadas por edificios en toda la ventana.
 - Alturas exclusivamente sintéticas; terreno/datum desconocidos, base plana Z=0. Sin interiores, fachadas, ventanas ni puertas.
+- Los edificios que cruzan el AOI se recortan; las paredes que cierran ese corte son límites del blockout, no fachadas medidas. No se completa la parte exterior a la ventana.
 - Una malla agregada adecuada para este lote, pero sin streaming/LOD ni edición incremental por edificio. Antes de escalar deben definirse sectores, presupuestos y actualización por grupos; no cargar toda Montevideo.
 - Recarga síncrona y cocción de colisión pueden causar pausas. Las mediciones dependen de esta máquina y ejecución, no son un presupuesto de rendimiento de producción.
 - Falta staging/empaquetado de Data y validación de recursos debug en builds distribuidos. No se promete soporte de juego empaquetado.

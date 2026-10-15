@@ -35,7 +35,7 @@ bool FBuildingFootprintLoader::Load(const FString& Root, const FString& Manifest
 	const TArray<TSharedPtr<FJsonValue>> *Files=nullptr, *Features=nullptr;
 	const FObject *Policy=nullptr, *Counts=nullptr;
 	FString Mode, FilePath, Hash;
-	double FloorHeight, Version, ExpectedCount;
+	double FloorHeight=0, Version=0, ExpectedCount=0;
 	if (!Read(Root, ManifestPath, TEXT(""), Manifest, Error, &Candidate.LoadMetrics) || !Manifest->TryGetArrayField(TEXT("files"), Files) || Files->Num()!=1
 		|| !Manifest->TryGetObjectField(TEXT("height_policy"), Policy) || !(*Policy)->TryGetStringField(TEXT("mode"), Mode)
 		|| Mode != TEXT("synthetic_blockout") || !Number(*Policy, TEXT("floor_height_m"), FloorHeight) || FloorHeight<2 || FloorHeight>5
@@ -54,7 +54,7 @@ bool FBuildingFootprintLoader::Load(const FString& Root, const FString& Manifest
 		const FObject* Item=nullptr;
 		FBuildingFootprint Footprint;
 		FString Id;
-		double Seed, Floors;
+		double Seed=0, Floors=0;
 		const TArray<TSharedPtr<FJsonValue>>* Center=nullptr;
 		if (!(*Features)[I]->TryGetObject(Item) || !(*Item)->TryGetStringField(TEXT("id"),Id) || Ids.Contains(Id)
 			|| Id != Geometry.Features[I].Id || !Geometry.Features[I].bPolygon || Geometry.Features[I].Role!=TEXT("buildings")
@@ -67,7 +67,7 @@ bool FBuildingFootprintLoader::Load(const FString& Root, const FString& Manifest
 			|| !Number(*Item,TEXT("floors"),Floors) || Floors!=3+static_cast<uint32>(Seed)%3
 			|| !Number(*Item,TEXT("height_m"),Footprint.HeightMeters) || !FMath::IsNearlyEqual(Footprint.HeightMeters,Floors*FloorHeight,1e-8)
 			|| !(*Item)->TryGetArrayField(TEXT("centroid"),Center) || Center->Num()!=2) { return false; }
-		double Lon, Lat;
+		double Lon=0, Lat=0;
 		if (!(*Center)[0]->TryGetNumber(Lon) || !(*Center)[1]->TryGetNumber(Lat)) { return false; }
 		FLocalGeoCoordinate Local;
 		const double ConvertStart = FPlatformTime::Seconds();

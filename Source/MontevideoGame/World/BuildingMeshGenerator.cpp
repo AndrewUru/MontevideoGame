@@ -19,8 +19,8 @@ bool FBuildingMeshGenerator::Build(const FBuildingFootprintData& Data, FDynamicM
 		if (Cross.SquaredLength()<0.5) { return false; }
 		const int32 Id = Mesh.AppendTriangle(A,B,C,Group);
 		if (Id<0) { return false; }
-		// Unreal front faces use clockwise winding; overlay normals point outward.
-		const FVector3f Normal(-Cross.X,-Cross.Y,-Cross.Z);
+		// VectorUtil::Normal already reverses the cross product for Unreal's clockwise front faces.
+		const FVector3f Normal(Cross.X,Cross.Y,Cross.Z);
 		const float Shade = Normal.Z>0.5f ? 1.0f : 0.65f + 0.12f*Normal.X - 0.08f*Normal.Y;
 		const FVector4f Color(0.55f*Shade,0.49f*Shade,0.38f*Shade,1);
 		auto* Colors = Mesh.Attributes()->PrimaryColors();

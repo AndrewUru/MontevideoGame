@@ -18,7 +18,7 @@
 
 namespace
 {
-	constexpr EAutomationTestFlags Flags = EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter;
+	constexpr EAutomationTestFlags M3TestFlags = EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter;
 	const FString ManifestPath = TEXT("Data/processed/montevideo/m3/manifest.json");
 	bool Load(FAutomationTestBase& Test, FGeospatialBlockoutData& Data)
 	{
@@ -60,7 +60,7 @@ namespace
 	};
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3DataTest, "Montevideo.M3.01OfficialGeometry", Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3DataTest, "Montevideo.M3.01OfficialGeometry", M3TestFlags)
 bool FM3DataTest::RunTest(const FString&)
 {
 	FGeospatialBlockoutData Data;
@@ -88,7 +88,7 @@ bool FM3DataTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3AxesTest, "Montevideo.M3.02OriginAxesScale", Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3AxesTest, "Montevideo.M3.02OriginAxesScale", M3TestFlags)
 bool FM3AxesTest::RunTest(const FString&)
 {
 	FGeospatialBlockoutData Data;
@@ -109,7 +109,7 @@ bool FM3AxesTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3RejectTest, "Montevideo.M3.03RejectCorruptOrInvertedData", Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3RejectTest, "Montevideo.M3.03RejectCorruptOrInvertedData", M3TestFlags)
 bool FM3RejectTest::RunTest(const FString&)
 {
 	FFixture Fixture;
@@ -135,7 +135,7 @@ bool FM3RejectTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3BoundsRejectTest, "Montevideo.M3.04RejectRadiusAndAxes", Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3BoundsRejectTest, "Montevideo.M3.04RejectRadiusAndAxes", M3TestFlags)
 bool FM3BoundsRejectTest::RunTest(const FString&)
 {
 	FFixture Fixture;
@@ -153,7 +153,7 @@ bool FM3BoundsRejectTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3CollisionTest, "Montevideo.M3.05CollisionAndReload", Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3CollisionTest, "Montevideo.M3.05CollisionAndReload", M3TestFlags)
 bool FM3CollisionTest::RunTest(const FString&)
 {
 	UWorld::InitializationValues Values;
@@ -182,7 +182,7 @@ bool FM3CollisionTest::RunTest(const FString&)
 	return true;
 }
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3VisualTest, "Montevideo.M3.06RenderColors", Flags)
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FM3VisualTest, "Montevideo.M3.06RenderColors", M3TestFlags)
 bool FM3VisualTest::RunTest(const FString&)
 {
 	UWorld::InitializationValues Values;
