@@ -236,7 +236,7 @@ bool FM3VisualTest::RunTest(const FString&)
 			}
 		}
 		const auto* Floor = Actor->FindComponentByClass<UStaticMeshComponent>();
-		const auto* FloorStyle = Floor ? Cast<UMaterialInstanceDynamic>(Floor->GetMaterial(0)) : nullptr;
+		auto* FloorStyle = Floor ? Cast<UMaterialInstanceDynamic>(Floor->GetMaterial(0)) : nullptr;
 		if (TestNotNull(TEXT("Runtime floor material instance"), FloorStyle))
 		{
 			TestTrue(TEXT("Floor uses unlit shader"), FloorStyle->GetMaterial()->GetShadingModels().HasOnlyShadingModel(MSM_Unlit));

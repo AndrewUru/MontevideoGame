@@ -6,7 +6,7 @@ La escena se genera al iniciar Play sobre el mapa `Entry` ya incluido en Unreal.
 
 ## Fuentes y alcance
 
-Fuentes primarias: [SIG de la Intendencia](https://sig.montevideo.gub.uy/), su [WFS GetCapabilities](https://montevideo.gub.uy/app/geoserver/ows?service=WFS&version=1.1.0&request=GetCapabilities) y los enlaces de metadatos anunciados en él. `fetch_m3.py` busca títulos exactos en GetCapabilities, toma los nombres de capa anunciados, sigue MetadataURL y verifica que el enlace SHAPE-ZIP del XML corresponda a esa misma capa. No supone nombres de layers.
+Fuentes primarias: [SIG de la Intendencia](https://sig.montevideo.gub.uy/), su [WFS GetCapabilities](https://montevideo.gub.uy/app/geoserver/owsíservice=WFS&version=1.1.0&request=GetCapabilities) y los enlaces de metadatos anunciados en él. `fetch_m3.py` busca títulos exactos en GetCapabilities, toma los nombres de capa anunciados, sigue MetadataURL y verifica que el enlace SHAPE-ZIP del XML corresponda a esa misma capa. No supone nombres de layers.
 
 | Elemento | Fuente/capa | Entidades utilizadas |
 | --- | --- | ---: |
@@ -81,7 +81,7 @@ La fecha `processed_at_utc` es un parámetro UTC explícito, capturado al ejecut
 - `FGeospatialBlockoutLoader`, en `Geospatial/`: lectura JSON acotada, rutas dentro del proyecto, checksums, origen, CRS, índices, radio, winding, área, counts y bbox; convierte con `FGeoReference`. No crea actores. El resultado anterior no se reemplaza en caso de error.
 - `AGeospatialBlockoutActor`, en `World/`: dos `UDynamicMeshComponent` transitorios. Superficies poligonales con colisión compleja como simple y cocción síncrona; trazos sin colisión. Render basado en roles de datos, sin coordenadas/nombres de lugares hardcodeados.
 - `AMontevideoBlockoutGameMode : AMontevideoGameGameMode`: compone escena, luces y PlayerStart al iniciar el juego; reutiliza `BP_ThirdPersonCharacter` y `BP_ThirdPersonPlayerController`. No modifica sus assets ni añade gameplay.
-- Se reutilizan `/Engine/Maps/Entry`, `/Engine/BasicShapes/Cube` y `/Engine/EngineDebugMaterials/VertexColorMaterial`, todos preexistentes. `Entry` está vacío antes de Play porque la escena se construye durante InitGame.
+- Se reutilizan `/Engine/Maps/Entry`, `/Engine/BasicShapes/Cube` y `/Engine/EngineDebugMaterials/VertexColorViewMode_ColorOnly` y `/Engine/EngineDebugMaterials/DebugMeshMaterial`, todos preexistentes. `Entry` está vacío antes de Play porque la escena se construye durante InitGame.
 - Config selecciona `Entry` para editor/juego y `/Script/MontevideoGame.MontevideoBlockoutGameMode` como GameMode global. `Lvl_ThirdPerson` conserva su override Blueprint y sirve para volver a comprobar el template.
 
 Dependencias nuevas privadas en el único módulo existente: **Json, GeometryCore, GeometryFramework**, incluidas con UE 5.8.3. Se verificaron headers/APIs en la instalación real; no se habilitó ProceduralMeshComponent ni ningún plugin. Justificación previa en [ARCHITECTURE.md](ARCHITECTURE.md). No se añadieron dependencias Python respecto a M2.5.
@@ -89,10 +89,72 @@ Dependencias nuevas privadas en el único módulo existente: **Json, GeometryCor
 Presentación:
 
 - Plaza verde; manzanas azul/gris planas; perímetros claros; ejes viales amarillos.
-- Trazo de calles de 30 cm y perímetro de 15 cm: símbolos gráficos, **no anchos medidos**. Z=1 cm evita z-fighting y no representa elevación.
+- Trazo de calles de 200 cm y perímetro de 30 cm: símbolos gráficos, **no anchos medidos**. Offsets de presentación en Z detallados en «Visual debug rendering»; no representan elevaciones.
 - Un cubo del Engine escalado proporciona soporte neutral bajo el área, con cara superior Z=-0,5 cm. Es un plano de ingeniería ficticio, no terreno ni inferencia de cobertura urbana. Las superficies oficiales están en Z=0.
 - Flechas de referencia en el origen: roja +X norte, verde +Y este, ambas de **20 m**. Son ayudas métricas, no cartografía.
 - PlayerStart en (0,0,120) cm, mirando al este. El centroide está dentro de la plaza; los 120 cm colocan la cápsula sobre el plano, no indican altitud. Movimiento original a 500 cm/s, cámara y salto intactos.
+
+## Visual debug rendering
+
+Corrección de representación runtime posterior a la primera entrega M3. **No implica aceptación visual de M3.** No cambia datos GIS, conversión, escala, coordenadas de superficies ni assets binarios.
+
+### Causa comprobada antes de editar
+
+- `AGeospatialBlockoutActor` asignaba `VertexColorMaterial` a superficies y trazos. No utilizaban `DefaultMaterial` como material asignado. La carga real del asset confirmó que interpreta `Vertex Color`: conecta ese nodo a Emissive, pero su shading model es **Default Lit**, con otra entrada en Base Color.
+- `SetVertexColor` guardaba correctamente los RGB en `FDynamicMesh3`, pero las mallas no tenían atributos `PrimaryColors`. El código del Engine (`DynamicMeshSceneProxy.h`, `MeshRenderBufferSet.h`) solo transmite el overlay de colores al buffer de render. En su ausencia utiliza `ConstantVertexColor = FColor::White`. **Esta era la causa directa de perder todos los colores y mostrar blanco.**
+- El cubo del soporte no tenía override: su material real, inspeccionado mediante carga del asset, era `/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial`. No era un suelo gris definido por M3.
+- `Entry` contiene un PlayerStart y ninguna luz ni volumen de exposición guardados. M3 crea DirectionalLight de intensidad 8, SkyLight de intensidad 1, SkyAtmosphere y PostProcessVolume transitorios. El volumen ya fijaba mínimo=máximo=0; con el rango extendido del proyecto esto fija **EV100=0**, sin adaptación automática. La iluminación sobre materiales lit y una superficie recibida como blanca contribuían a la presentación brillante. No se atribuye el fallo a auto exposure ni se ha medido por separado cuánto contribuía cada efecto a la imagen del usuario.
+- Z original: plaza/manzanas 0 cm, cara superior del soporte -0,5 cm, todos los trazos y flechas +1 cm. Las superficies no eran coplanares con el suelo; los trazos sí podían competir entre sí en intersecciones. Vías de 30 cm, perímetros de 15 cm y flechas de 25 cm eran demasiado finos para lectura aérea.
+- Una comprobación de intersecciones en memoria entre la plaza y las 66 manzanas no encontró solapamiento de área significativo (umbral 1e-12 grados cuadrados). No se necesita desplazar la plaza respecto a las manzanas; ambas conservan Z=0 y sus coordenadas originales.
+- Las flechas sí se construían: origen (0,0), norte hasta (2000,0) y este hasta (0,2000), en centímetros locales. No faltaban por un problema geográfico.
+
+### Solución y materiales
+
+`PrepareRenderAttributes` copia los colores a un overlay RGBA y asigna sus índices a **cada triángulo**, junto con normales válidas. Se declara explícitamente `NoTransform`: RGB lineal, alpha 1. El material recibe por fin el color previsto.
+
+Se inspeccionaron por carga real los materiales preexistentes `VertexColorMaterial`, `VertexColorViewMode_ColorOnly`, `DebugMeshMaterial`, `DebugMeshMaterialFakeLight` y `LevelColorationUnlitMaterial`, sin guardar ninguno. Se seleccionaron:
+
+- Superficies, perímetros, vías y flechas: `/Engine/EngineDebugMaterials/VertexColorViewMode_ColorOnly.VertexColorViewMode_ColorOnly`, **Unlit**. El grafo conecta VertexColor al nodo Custom con código `return VertexColor;`, conectado a Emissive. No depende del sol ni del cielo.
+- Suelo: `/Engine/EngineDebugMaterials/DebugMeshMaterial.DebugMeshMaterial`, **Unlit**, parámetro vectorial `Color` conectado directamente a Emissive. Una `UMaterialInstanceDynamic` transitoria fija gris oscuro y se reutiliza al recargar. El cubo, su transform y su colisión permanecen iguales.
+
+No se crean materiales persistentes ni se compilan grafos nuevos mediante código. Si faltan los recursos requeridos, Reload devuelve un error y conserva la escena anterior.
+
+La exposición fija EV100=0 se conserva. Solo el volumen runtime de M3 fija además compensación de exposición 0 y bloom 0 para evitar aclaramiento implícito y halos. No se editan CVars, Config, el mapa Entry ni la exposición global del proyecto.
+
+### Paleta, alturas de presentación y grosores
+
+RGB lineal antes del tonemapper; los valores no son códigos sRGB/hex de pantalla.
+
+| Elemento | RGB lineal | Z (cm) | Grosor gráfico |
+| --- | --- | ---: | --- |
+| Plaza sílida verde | (0,025; 0,5; 0,08) | 0 | Polígono oficial |
+| Manzanas azul/gris oscuro | (0,035; 0,065; 0,11) | 0 | Polígonos oficiales |
+| Perímetros azul/gris claro | (0,12; 0,18; 0,24) | +2 | 30 cm |
+| Ejes viales amarillo/naranja | (1; 0,45; 0,015) | +4 | 200 cm |
+| Norte rojo, +X | (0,9; 0,015; 0,01) | +8 | 100 cm |
+| Este verde, +Y | (0,05; 1; 0,04) | +10 | 100 cm |
+| Cara superior del soporte gris oscuro | (0,018; 0,018; 0,018) | -0,5 | Extensión original del soporte |
+
+Las flechas mantienen 20 m desde el origen; sus dos ramas de punta retroceden 3 m y se separan lateralmente 2 m. Los offsets solo separan capas de dibujo; no alteran la altura de los datos, la colisión de superficies ni el tamaño del mundo. Las líneas siguen sin colisión. Los tramos coincidentes de la misma categoría tienen el mismo color.
+
+### Verificación y límites
+
+La nueva prueba `Montevideo.M3.06RenderColors` comprueba overlays completos y fieles al color previsto en cada esquina, shaders unlit, paleta por rol, soporte oscuro, reutilización de su material y posiciones de superficies idénticas al resultado GIS. Se conservan los tests de raycast a Z=0, normal hacia arriba y recarga segura.
+
+El tonemapper y la pantalla todavía influyen en el color percibido. Unlit es deliberado para cartografía de debug: las superficies no muestran sombras artísticas ni relieve; el personaje conserva su iluminación. Los 2 m de trazo vial **no son una estimación del ancho de calle**. A distancias extremas los trazos pueden seguir siendo subpíxel. La comprobación headless valida datos y ejecución, no demuestra legibilidad con GPU: la aceptación sigue dependiendo de la inspección visual del usuario en Play.
+
+Evidencia local del diagnóstico: `Saved/M3Visual/materials.log`, `custom.log` y scripts de inspección de solo lectura. Compilación/tests de esta corrección se registran en `Saved/M3Visual/`, separados de la validación histórica de la primera entrega.
+
+Validación de esta corrección, 15/10/2026:
+
+- UE descubierto mediante EngineAssociation/registro: **5.8.3 CL58210709**. `MontevideoGameEditor Win64 Development`: **Result: Succeeded, exit 0, 203,16 s** (`build.log`). Se corrigió antes un error de constancia en la nueva prueba; la compilación final no tiene errores.
+- M2/M3: **15/15**, 0 fallos, 0 warnings de pruebas, 0 pendientes; exit 0 y reporte JSON comprobado (`Automation/index.json`, `tests.log`). Incluye 9 M2 y 6 M3.
+- Standalone headless: **exit 0**, `Entry`, 67 polígonos, 160 líneas, 4.121 vértices e instancia `BP_ThirdPersonCharacter_C_0`; ningún error del blockout (`standalone.log`). No se realizó una comprobación de imagen con GPU.
+- Integridad SHA-256 e inventario: **753 assets `.uasset`/`.umap` y 18 archivos de Data, cero cambios** (`before.json`, `integrity.json`). No se alteraron Config, Build.cs ni plugins.
+- Warnings finales de compilación: MSVC 14.51.36260 no preferido (preferido 14.50.35717) y C4996 internos de GeometryFramework `GetMaterialRelevance` y Chaos `GetRadius`/`GetMargin` (Sphere, Convex y Plane). No se modificó ni se silenciaron avisos del Engine.
+- Al iniciar el Editor aparecen los 14 errores de smoke tests de Core conocidos de M2.5, previos a las suites solicitadas, y un aviso `LogLayoutService` de migración de layout del Editor. Standalone registra 21 avisos `LogEditorDataStorageUI` de widget factories. No son fallos de las 15 pruebas ni errores nuevos del renderer M3.
+
+Archivos de esta corrección: `World/GeospatialBlockoutActor.cpp`, `World/MontevideoBlockoutGameMode.cpp`, `Tests/GeospatialBlockoutTests.cpp` (todos bajo `Source/MontevideoGame/`) y este documento. Los cambios concurrentes del usuario en README se conservaron.
 
 ## Comandos de desarrollo
 
@@ -143,12 +205,12 @@ New-Item -ItemType Directory -Force Saved/M3 | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Falló la compilación' }
 & "$engineRoot/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" $projectFile -unattended -nullrhi -nosound -nosplash '-ExecCmds=Automation RunTests Montevideo.Geospatial+Montevideo.M3' '-TestExit=Automation Test Queue Empty' "-ReportExportPath=$PWD/Saved/M3/Automation" "-abslog=$PWD/Saved/M3/tests.log"
 $report = Get-Content Saved/M3/Automation/index.json -Raw | ConvertFrom-Json
-if ($LASTEXITCODE -ne 0 -or $report.failed -ne 0 -or $report.succeeded -ne 14 -or $report.succeededWithWarnings -ne 0 -or $report.notRun -ne 0) { throw 'Fallaron tests M2/M3: revisar reporte, no solo exit code' }
+if ($LASTEXITCODE -ne 0 -or $report.failed -ne 0 -or $report.succeeded -ne 15 -or $report.succeededWithWarnings -ne 0 -or $report.notRun -ne 0) { throw 'Fallaron tests M2/M3: revisar reporte, no solo exit code' }
 ```
 
-**Importante:** esta versión del motor puede cerrar con código 0 aun si falla una prueba. Siempre se inspecciona `index.json`, no solo el código de salida. Las suites contienen las nueve pruebas M2 y cinco M3: geometría oficial, origen/ejes/escala, rechazo de corrupción/inversión, radio/ejes incorrectos, colisión y recarga. La prueba M2.5 con argumentos externos se mantiene separada.
+**Importante:** esta versión del motor puede cerrar con código 0 aun si falla una prueba. Siempre se inspecciona `index.json`, no solo el código de salida. Las suites actuales contienen las nueve pruebas M2 y seis M3 (incluida la regresión de colores del renderer): geometría oficial, origen/ejes/escala, rechazo de corrupción/inversión, radio/ejes incorrectos, colisión y recarga. La prueba M2.5 con argumentos externos se mantiene separada.
 
-## Resultado técnico de esta entrega
+## Resultado técnico de la primera entrega (histórico)
 
 - Engine descubierto por registro/EngineAssociation: **UE 5.8.3 CL58210709**, `C:/Program Files/Epic Games/UE_5.8`.
 - Compilación final **MontevideoGameEditor Win64 Development: Result: Succeeded, exit 0, 60,38 s**. Los errores de integración detectados durante el desarrollo se corrigieron antes de esta compilación.

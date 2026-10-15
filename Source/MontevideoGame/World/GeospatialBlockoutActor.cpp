@@ -128,11 +128,12 @@ bool AGeospatialBlockoutActor::Reload(FString& Error)
 	for (const auto& Direction : {FVector(2000,0,0), FVector(0,2000,0)})
 	{
 		const FVector3f Color = Direction.X > 0 ? FVector3f(0.9f,0.015f,0.01f) : FVector3f(0.05f,1,0.04f);
-		Stroke(Lines, FVector::ZeroVector, Direction, 100, AxisZ, Color);
+		const double Z = Direction.X > 0 ? AxisZ : AxisZ + 2;
+		Stroke(Lines, FVector::ZeroVector, Direction, 100, Z, Color);
 		const FVector Unit = Direction.GetSafeNormal();
 		const FVector Side = FVector::CrossProduct(Unit,FVector::UpVector);
-		Stroke(Lines, Direction, Direction-Unit*300+Side*200, 100, AxisZ, Color);
-		Stroke(Lines, Direction, Direction-Unit*300-Side*200, 100, AxisZ, Color);
+		Stroke(Lines, Direction, Direction-Unit*300+Side*200, 100, Z, Color);
+		Stroke(Lines, Direction, Direction-Unit*300-Side*200, 100, Z, Color);
 	}
 	PrepareRenderAttributes(Polygons);
 	PrepareRenderAttributes(Lines);
