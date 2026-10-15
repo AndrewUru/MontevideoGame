@@ -82,6 +82,42 @@ Suite `Montevideo.Facades`: datos reales/determinismo completo, concavidad/patio
 
 Se ejecutan además suites M2/M2.5, M3 y M3.2, Python existente y protección SHA-256 de todos los assets y Data. No se añade lógica de fachada a Python.
 
+### Resultado comprobado — 2026-10-15
+
+- Instalación descubierta con EngineAssociation/registro: `C:/Program Files/Epic Games/UE_5.8`; Build.version **5.8.3, CL 58210709**. Target `MontevideoGameEditor Win64 Development`.
+- Primera compilación de la implementación: **Succeeded, exit 0, 200,45 s**. Corrección posterior del fixture y límite defensivo compiló, pero el enlace encontró un bloqueo transitorio `LNK1104` de la DLL (exit 6, 78,11 s). Sin procesos Unreal activos al revisar, el reintento final completó enlace/metadatos: **Succeeded, exit 0, 13,84 s**. Este último tiempo es incremental, no una compilación limpia completa.
+- Automation final: **26/26 correctas**, cero warnings en tests, cero fallos y cero no ejecutadas; exit 0. Geospatial 9, DataProvenance 1 con centroide real como argumento, M3 6, Buildings 5 y Facades 5. La primera pasada ya pasó 26 tests, pero emitió un warning por destruir un actor de fixture sin contexto de mundo; se corrigió registrando/desregistrando el contexto y se repitió la suite.
+- Python existente: **21/21 correctas**, sin omisiones, exit 0, 21,263 s. Incluye reproducibilidad e integridad; no se cambió el pipeline.
+- Standalone `-game -nullrhi`: **exit 0**, carga por defecto MVD_Prototype y crea `BP_ThirdPersonCharacter_C_0`, massing y fachadas. Status, Building 106187939, Style 1 y Reload ejecutados; el override Modern produjo 9 edificios Modern y cero balcones, y Reload recuperó exactamente los contadores originales.
+- SHA-256: **754 assets y 25 archivos de Data intactos**, cero modificados/eliminados y cero assets nuevos. Incluye raw, processed y MVD_Prototype. Git LFS conserva el mapa con OID `3e4b66253e8e90afc5b4c24c7bd53f19d1bc0730fb1e206c8b290230338578da`.
+- Warnings conocidos de build: MSVC 14.51.36260 no preferido (recomendado por UE 14.50.35717); deprecaciones C4996 en headers Engine para GetMaterialRelevance, GetMovementBase, GetRadius y GetMargin. Ningún warning atribuido al código C++ nuevo en la compilación final de fuentes.
+- El log Automation conserva 14 `Condition failed` durante el arranque del Engine, anteriores a las suites Montevideo; el reporte de estas es 26/26 limpio. Standalone conserva 21 warnings de widgets `LogEditorDataStorageUI`. Además, el lote de ocho comandos, con dos reconstrucciones síncronas, produjo `TickDeferredCommands took 1740.93ms`: se registra como coste real de debug, no se oculta ni se presenta la recarga como instantánea. No hubo errores standalone.
+
+Evidencias locales (no versionadas): `Saved/M3_3/build.log`, `build-initial.log`, `build-dll-lock.log`, `Automation/index.json`, `tests.log`, `python-tests.log`, `standalone.log`, `before.json`, `integrity.json`.
+
+### Métricas y rendimiento
+
+Contadores del estilo por seed, verificados también después de Reload:
+
+| Métrica | Resultado |
+| --- | ---: |
+| Edificios / footprints | 9 / 12 |
+| Fachadas (segmentos exteriores, no frentes arquitectónicos completos) | 506 |
+| Edges sin bay por longitud insuficiente | 443 |
+| Bays horizontales (repetidos por planta) | 430 |
+| Ventanas / puertas / balcones | 1.762 / 9 / 465 |
+| Edificios Classic / Modern / Residential / Civic | 2 / 0 / 5 / 2 |
+| Piezas orientadas | 13.362 |
+| Vértices / triángulos adicionales de fachada | 106.896 / 160.344 |
+| Grupos de identidad de fachada | 506 posibles; las piezas referencian su segmento |
+| Payload CPU estimado de mesh | 22.448.160 bytes (~21,41 MiB) |
+| Layout inicial standalone | 97,093 ms |
+| Generación y validación mesh | 448,822 ms |
+| Asignación al componente | 1,014 ms |
+| Total inicial de fachadas | **547,048 ms** |
+
+La suma no es exactamente el total: incluye búsqueda de material, sustitución de estado y otros costes. No incluye carga GIS ni generación de massing. Los contadores de vértices/triángulos son **adicionales** a los 1.052/2.076 de M3.2. No son métricas de FPS ni GPU: la ejecución usa NullRHI. Máquina de medición: Ryzen 5 3500U, 13 GiB RAM informada por Automation. Una sola ejecución no es benchmark estadístico. En el mismo proceso, override Modern tardó 727,081 ms y la recarga posterior 990,749 ms: coste síncrono variable, cercano a un segundo en esta máquina. Se mantiene documentado como deuda antes de escalar; no se introduce optimización prematura.
+
 ## Inventario de cambios M3.3
 
 Nuevos archivos:
