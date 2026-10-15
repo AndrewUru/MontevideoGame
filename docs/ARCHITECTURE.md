@@ -1,5 +1,11 @@
 # Arquitectura inicial
 
+## Decisión M3.3 — fachadas procedurales (autorizada)
+
+M3.1 y M3.2 fueron aceptados técnica y visualmente por el usuario. M3.3 añade presentación sobre los datos locales ya cargados: `FBuildingFootprintData` → `FFacadeLayoutGenerator` → `FFacadeMeshGenerator` → `AFacadeBlockoutActor`. El layout contiene estilos, segmentos exteriores y piezas identificables por footprint/edificio/planta. El generador geométrico no lee archivos ni modifica el massing. Un actor por lote mantiene una malla agregada sin colisión; el massing M3.2 sigue siendo dueño de la colisión. No se necesita un subsystem sin estado global o ciclo de vida independiente: el GameMode compone ambos actores y una referencia débil vincula la presentación a su fuente. Reload reconstruye un candidato antes de sustituir la malla.
+
+Estilos Classic, Modern, Residential y Civic son reglas genéricas sintéticas, seleccionadas por seed existente. Los anillos interiores se excluyen de módulos decorativos; los edges cortos pueden quedar sin huecos. Se preservan coordenadas, footprints, alturas y floors. Ventanas/puertas son overlays opacos, no perforaciones ni interacción. Se reutilizan GeometryCore/GeometryFramework y el material Engine vertex-color ya comprobado, sin dependencias, plugins, texturas ni assets binarios nuevos. M3.4/M4 no están autorizados; la aceptación visual M3.3 queda pendiente.
+
 ## Alcance y principios
 M1 consolida el runtime C++ del template Third Person en Unreal Engine 5.8.3. Python queda reservado para herramientas futuras; VS Code es el editor de trabajo. Inventario, toolchain y evidencias: [M1_BASELINE.md](M1_BASELINE.md). Los dominios futuros de este documento siguen siendo propuestas.
 
