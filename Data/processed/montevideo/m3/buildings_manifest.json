@@ -116,15 +116,15 @@
   "files": [
     {
       "path": "Data/processed/montevideo/m3/buildings.json",
-      "sha256": "32d5419d8309138b5d5fd3cfdec79c7711c12f7c9ab3aaa2db4a15420c183c7c",
-      "sha1": "24f4c40111602def6b6bf5d4d70843d1ac05c6a4"
+      "sha256": "a09c4775247485c583ebaf91cd3f19acefccbbd0e56b382a0a321cd57a575473",
+      "sha1": "e0bc32861d0c4bebf3e85cae4cec3d7182a59f95"
     }
   ],
   "counts": {
     "buildings": 9,
     "polygons": 12,
     "lines": 0,
-    "vertices": 527,
+    "vertices": 526,
     "triangles": 512
   },
   "expected_local_bbox_cm": [

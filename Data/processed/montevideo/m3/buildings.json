@@ -1967,6 +1967,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 4531.457332854917,
+      "triangulated_area_local_m2": 4531.457332854916,
       "expected_local_bbox_cm": [
         -19603.715590568787,
         -15583.035532322821,
@@ -2199,6 +2203,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 1457.2421378637132,
+      "triangulated_area_local_m2": 1457.2421378637134,
       "expected_local_bbox_cm": [
         -3035.4553507405208,
         -29630.183084942757,
@@ -2383,6 +2391,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 445.4913912606636,
+      "triangulated_area_local_m2": 445.49139126066353,
       "expected_local_bbox_cm": [
         -33897.77175353469,
         -34774.759219921354,
@@ -2471,6 +2483,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 1212.9267834304515,
+      "triangulated_area_local_m2": 1212.9267834304515,
       "expected_local_bbox_cm": [
         -15400.565171314413,
         -4239.38928191199,
@@ -2655,6 +2671,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 2050.880817680518,
+      "triangulated_area_local_m2": 2050.880817680518,
       "expected_local_bbox_cm": [
         -10505.791654020126,
         -6804.179546647542,
@@ -2759,6 +2779,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 578.1752786236657,
+      "triangulated_area_local_m2": 578.1752786236656,
       "expected_local_bbox_cm": [
         5246.407494585831,
         -14709.980865506572,
@@ -2823,6 +2847,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 8.307201394044942,
+      "triangulated_area_local_m2": 8.307201394044942,
       "expected_local_bbox_cm": [
         -25116.21657770742,
         -34817.81522646903,
@@ -2903,6 +2931,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 197.46305260542363,
+      "triangulated_area_local_m2": 197.46305260542366,
       "expected_local_bbox_cm": [
         -27630.978322670704,
         -34809.825225386434,
@@ -2975,6 +3007,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 679.3217006533636,
+      "triangulated_area_local_m2": 679.3217006533636,
       "expected_local_bbox_cm": [
         4782.897477453208,
         -35086.2374254933,
@@ -3071,6 +3107,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 795.1187989883306,
+      "triangulated_area_local_m2": 795.1187989883306,
       "expected_local_bbox_cm": [
         30906.796264457,
         -25084.30058262279,
@@ -3199,6 +3239,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 0,
+      "area_local_m2": 720.5231991356675,
+      "triangulated_area_local_m2": 720.5231991356675,
       "expected_local_bbox_cm": [
         25542.046009543254,
         -13872.743494156466,
@@ -3959,10 +4003,6 @@
         [
           -56.199600442741094,
           -34.90734648390015
-        ],
-        [
-          -56.199600442741094,
-          -34.90734648390015
         ]
       ],
       "triangles": [
@@ -4002,20 +4042,20 @@
         107,
         108,
         109,
+        2,
         90,
-        91,
-        184,
+        183,
         0,
         2,
-        184,
+        183,
+        91,
+        183,
+        90,
         3,
         4,
         90,
         4,
         8,
-        90,
-        184,
-        2,
         90,
         79,
         86,
@@ -4177,7 +4217,7 @@
         180,
         91,
         182,
-        184,
+        183,
         91,
         100,
         113,
@@ -4698,8 +4738,7 @@
           180,
           181,
           182,
-          183,
-          184
+          183
         ]
       ],
       "centroid": [
@@ -4716,6 +4755,10 @@
       ],
       "altitude": null,
       "altitude_reference": null,
+      "restored_collinear_boundary_vertices": 0,
+      "merged_reprojection_vertices": 1,
+      "area_local_m2": 1051.7588257146087,
+      "triangulated_area_local_m2": 1051.7588257146087,
       "expected_local_bbox_cm": [
         -9703.231485267197,
         1249.9776592243181,

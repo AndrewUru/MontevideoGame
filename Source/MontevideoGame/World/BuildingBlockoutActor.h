@@ -23,5 +23,5 @@ private:
 	UPROPERTY() TObjectPtr<UDynamicMeshComponent> Buildings;
 	FBuildingFootprintData Data;
 	FBuildingMeshMetrics Metrics;
-	double CollisionMilliseconds=0;
+	double CollisionMilliseconds=0, ComponentMilliseconds=0, TotalMilliseconds=0;
 };

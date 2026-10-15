@@ -1,4 +1,5 @@
 #include "Geospatial/BuildingFootprintData.h"
+#include "Geospatial/GeospatialJson.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonSerializer.h"
 #include "Misc/FileHelper.h"
@@ -9,19 +10,7 @@
 namespace
 {
 	using FObject = TSharedPtr<FJsonObject>;
-	bool Read(const FString& Root, const FString& Relative, const FString& Hash, FObject& Out)
-	{
-		FString Path = FPaths::ConvertRelativePathToFull(FPaths::Combine(Root, Relative));
-		FPaths::CollapseRelativeDirectories(Path);
-		if (!FPaths::IsRelative(Relative) || !FPaths::IsUnderDirectory(Path, FPaths::ConvertRelativePathToFull(Root))) { return false; }
-		TArray<uint8> Bytes;
-		const int64 Size = IFileManager::Get().FileSize(*Path);
-		if (Size < 0 || Size > 25*1024*1024 || !FFileHelper::LoadFileToArray(Bytes, *Path)) { return false; }
-		if (!Hash.IsEmpty() && !FSHA1::HashBuffer(Bytes.GetData(), Bytes.Num()).ToString().Equals(Hash, ESearchCase::IgnoreCase)) { return false; }
-		FString Content;
-		FFileHelper::BufferToString(Content, Bytes.GetData(), Bytes.Num());
-		return FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Content), Out) && Out.IsValid();
-	}
+	using GeospatialJson::Read;
 	bool Number(const FObject& Object, const TCHAR* Key, double& Out)
 	{
 		return Object && Object->TryGetNumberField(Key, Out) && FMath::IsFinite(Out);
@@ -40,22 +29,20 @@ bool FBuildingFootprintLoader::Load(const FString& Root, const FString& Manifest
 	FBuildingFootprintData Candidate;
 	FGeospatialBlockoutData Geometry;
 	if (!FGeospatialBlockoutLoader::Load(Root, ManifestPath, Geometry, Error, &Candidate.LoadMetrics)) { return false; }
-	const double Start = FPlatformTime::Seconds();
 	Error = TEXT("Invalid building schema, IDs or height provenance");
 	FObject Manifest, Layer;
-	const TArray<TSharedPtr<FJsonValue>> *Files, *Features;
-	const FObject *Policy, *Counts;
+	const TArray<TSharedPtr<FJsonValue>> *Files=nullptr, *Features=nullptr;
+	const FObject *Policy=nullptr, *Counts=nullptr;
 	FString Mode, FilePath, Hash;
 	double FloorHeight, Version, ExpectedCount;
-	if (!Read(Root, ManifestPath, TEXT(""), Manifest) || !Manifest->TryGetArrayField(TEXT("files"), Files) || Files->Num()!=1
+	if (!Read(Root, ManifestPath, TEXT(""), Manifest, Error, &Candidate.LoadMetrics) || !Manifest->TryGetArrayField(TEXT("files"), Files) || Files->Num()!=1
 		|| !Manifest->TryGetObjectField(TEXT("height_policy"), Policy) || !(*Policy)->TryGetStringField(TEXT("mode"), Mode)
 		|| Mode != TEXT("synthetic_blockout") || !Number(*Policy, TEXT("floor_height_m"), FloorHeight) || FloorHeight<2 || FloorHeight>5
 		|| !Manifest->TryGetObjectField(TEXT("counts"), Counts) || !Number(*Counts,TEXT("buildings"),ExpectedCount)) { return false; }
-	const FObject* File;
+	const FObject* File=nullptr;
 	if (!(*Files)[0]->TryGetObject(File) || !(*File)->TryGetStringField(TEXT("path"), FilePath) || !(*File)->TryGetStringField(TEXT("sha1"),Hash)
-		|| !Read(Root,FilePath,Hash,Layer) || !Number(Layer,TEXT("building_schema_version"),Version) || Version!=1
+		|| !Read(Root,FilePath,Hash,Layer,Error,&Candidate.LoadMetrics) || !Number(Layer,TEXT("building_schema_version"),Version) || Version!=1
 		|| !Layer->TryGetArrayField(TEXT("features"),Features) || Features->Num()!=Geometry.Features.Num() || Geometry.Sources.Num()!=1) { return false; }
-	Candidate.LoadMetrics.JsonMilliseconds += (FPlatformTime::Seconds()-Start)*1000;
 	Candidate.Origin = Geometry.MathematicalOrigin;
 	Candidate.Dataset = Geometry.Sources[0];
 	FGeoReference Reference;
@@ -63,11 +50,11 @@ bool FBuildingFootprintLoader::Load(const FString& Root, const FString& Manifest
 	TSet<FString> Ids, Buildings;
 	for (int32 I=0; I<Features->Num(); ++I)
 	{
-		const FObject* Item;
+		const FObject* Item=nullptr;
 		FBuildingFootprint Footprint;
 		FString Id;
 		double Seed, Floors;
-		const TArray<TSharedPtr<FJsonValue>>* Center;
+		const TArray<TSharedPtr<FJsonValue>>* Center=nullptr;
 		if (!(*Features)[I]->TryGetObject(Item) || !(*Item)->TryGetStringField(TEXT("id"),Id) || Ids.Contains(Id)
 			|| Id != Geometry.Features[I].Id || !Geometry.Features[I].bPolygon || Geometry.Features[I].Role!=TEXT("buildings")
 			|| !(*Item)->TryGetStringField(TEXT("building_id"),Footprint.BuildingId)

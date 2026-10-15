@@ -1,4 +1,5 @@
 #include "Geospatial/GeospatialBlockoutData.h"
+#include "Geospatial/GeospatialJson.h"
 #include "Dom/JsonObject.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -33,35 +34,7 @@ namespace
 		const TSharedPtr<FJsonValue>* Value = Object ? Object->Values.Find(Key) : nullptr;
 		return Value && (*Value)->IsNull();
 	}
-	bool Read(const FString& Root, const FString& RelativePath, const FString& ExpectedSha1, FObject& Out, FString& Error, FGeospatialLoadMetrics* Metrics)
-	{
-		const double Start = FPlatformTime::Seconds();
-		FString Path = FPaths::ConvertRelativePathToFull(FPaths::Combine(Root, RelativePath));
-		FPaths::CollapseRelativeDirectories(Path);
-		if (!FPaths::IsRelative(RelativePath) || !FPaths::IsUnderDirectory(Path, FPaths::ConvertRelativePathToFull(Root)))
-		{
-			Error = TEXT("Data path escapes project directory"); return false;
-		}
-		TArray<uint8> Bytes;
-		const int64 Size = IFileManager::Get().FileSize(*Path);
-		if (Size < 0 || Size > 25 * 1024 * 1024 || !FFileHelper::LoadFileToArray(Bytes, *Path))
-		{
-			Error = TEXT("Cannot read bounded data file: ") + RelativePath; return false;
-		}
-		// SHA-256 is independently checked by Python. Core's portable SHA-1 also detects stale runtime files.
-		if (!ExpectedSha1.IsEmpty() && !FSHA1::HashBuffer(Bytes.GetData(), Bytes.Num()).ToString().Equals(ExpectedSha1, ESearchCase::IgnoreCase))
-		{
-			Error = TEXT("Data checksum mismatch: ") + RelativePath; return false;
-		}
-		FString Content;
-		FFileHelper::BufferToString(Content, Bytes.GetData(), Bytes.Num());
-		if (!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Content), Out) || !Out)
-		{
-			Error = TEXT("Malformed JSON: ") + RelativePath; return false;
-		}
-		if (Metrics) { Metrics->JsonMilliseconds += (FPlatformTime::Seconds()-Start)*1000; }
-		return true;
-	}
+	using GeospatialJson::Read;
 	bool Indices(const FValues& Values, int32 VertexCount, TArray<int32>& Out)
 	{
 		for (const auto& Value : Values)

@@ -4,11 +4,12 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import math
+import time
 from pathlib import Path
 
 import pyproj
 import shapely
-from shapely.geometry import box, Polygon
+from shapely.geometry import box, Polygon, Point, LineString
 from shapely.ops import unary_union
 from process_public_spaces import ROOT, DEFAULT_OUTPUT, serialize, digest
 from process_m3 import read_shapes, parts, verify_snapshot
@@ -30,7 +31,7 @@ def height_policy(identity, floor_height_m=3.0):
                 height_m=floors*floor_height_m, height_source='synthetic_blockout')
 
 
-def encode_polygon(geometry, identity, wgs, local):
+def encode_polygon(geometry, identity, wgs, local, metrics=None):
     if geometry.is_empty or not geometry.is_valid or geometry.geom_type != 'Polygon' or geometry.area <= 0:
         raise ValueError('Invalid footprint, no automatic repairs: '+identity)
     geometry = shapely.normalize(geometry)
@@ -46,9 +47,30 @@ def encode_polygon(geometry, identity, wgs, local):
     positions = [(n*100,e*100) for e,n,_ in [local.transform(lon,lat,0,errcheck=True) for lon,lat in coords]]
     if any(math.hypot(x,y)>50000 for x,y in positions):
         raise ValueError('Footprint exceeds authorized radius')
+    # Two source vertices can collapse to exactly the same double-precision WGS84/local
+    # coordinate. Merge only these duplicates, with an explicit <= 1 micrometer UTM check.
+    remap, unique, compact_coords, compact_positions, original_ids = [], {}, [], [], []
+    for i,p in enumerate(positions):
+        if p not in unique:
+            unique[p]=len(compact_positions); compact_positions.append(p); compact_coords.append(coords[i]); original_ids.append(i)
+        elif math.dist(vertices[i],vertices[original_ids[unique[p]]])>1e-6:
+            raise ValueError('Unexpected non-negligible reprojection collapse')
+        remap.append(unique[p])
+    merged=len(positions)-len(compact_positions)
+    positions,coords=compact_positions,compact_coords
+    compact_rings=[]
+    for ring in rings:
+        result=[]
+        for i in ring:
+            if not result or result[-1]!=remap[i]: result.append(remap[i])
+        if result and result[0]==result[-1]: result.pop()
+        if len(result)<3: raise ValueError('Collapsed ring')
+        compact_rings.append(result)
+    rings=compact_rings
     local_polygon = Polygon([positions[i] for i in rings[0]], [[positions[i] for i in r] for r in rings[1:]])
     if not local_polygon.is_valid:
         raise ValueError('Reprojection invalidates footprint: '+identity)
+    triangulation_start=time.perf_counter()
     tessellation = sorted(shapely.constrained_delaunay_triangles(local_polygon).geoms, key=lambda t:t.wkb_hex)
     if local_polygon.symmetric_difference(unary_union(tessellation)).area > 0.01:
         raise ValueError('Triangulation changes footprint or holes')
@@ -63,14 +85,40 @@ def encode_polygon(geometry, identity, wgs, local):
         if cross < 0:
             ids.reverse()
         triangles.extend(ids)
+    # GEOS may omit an exactly collinear boundary vertex. Restore it by subdividing
+    # the containing triangle edge, never by deleting footprint vertices or leaving a T-junction.
+    restored = 0
+    for missing in sorted(set(i for r in rings for i in r)-set(triangles)):
+        found = False
+        for t in range(0,len(triangles),3):
+            ids=triangles[t:t+3]
+            for k in range(3):
+                a,b,c=ids[k],ids[(k+1)%3],ids[(k+2)%3]
+                edge=LineString([positions[a],positions[b]])
+                point=Point(positions[missing])
+                fraction=edge.project(point,normalized=True)
+                if 0 < fraction < 1 and point.distance(edge)<=1e-4: # <= 1 micrometer local tolerance
+                    triangles[t:t+3]=[a,missing,c,missing,b,c]
+                    restored+=1; found=True; break
+            if found: break
+        if not found:
+            raise ValueError('Cannot restore omitted boundary vertex: '+identity)
+    roof_polygons=[Polygon([positions[j] for j in triangles[t:t+3]]) for t in range(0,len(triangles),3)]
+    if local_polygon.symmetric_difference(unary_union(roof_polygons)).area>0.01:
+        raise ValueError('Restored roof changes polygon/hole coverage')
+    if metrics is not None:
+        metrics['triangulation_ms']=metrics.get('triangulation_ms',0)+(time.perf_counter()-triangulation_start)*1000
     centroid = list(wgs.transform(geometry.centroid.x, geometry.centroid.y, errcheck=True))
     return dict(id=identity, role='buildings', kind='polygon', vertices=coords, triangles=triangles, rings=rings,
                 centroid=centroid, centroid_source='derived_area_centroid_utm', area_utm_m2=geometry.area,
                 bbox_utm_m=list(geometry.bounds), altitude=None, altitude_reference=None,
+                restored_collinear_boundary_vertices=restored,
+                merged_reprojection_vertices=merged,
+                area_local_m2=local_polygon.area/10000, triangulated_area_local_m2=sum(t.area for t in roof_polygons)/10000,
                 expected_local_bbox_cm=[min(p[0] for p in positions),min(p[1] for p in positions),max(p[0] for p in positions),max(p[1] for p in positions)])
 
 
-def build(source_path=SOURCE, processed_at_utc=None, floor_height_m=3.0):
+def build(source_path=SOURCE, processed_at_utc=None, floor_height_m=3.0, metrics=None):
     source = verify_snapshot(source_path)
     if source['attributes'] != ['estado','gid','nombre'] or '640/10' not in source['license']['official_statement']:
         raise ValueError('Source semantics/license changed; review before processing')
@@ -95,7 +143,7 @@ def build(source_path=SOURCE, processed_at_utc=None, floor_height_m=3.0):
         seen.add(sid)
         clipped = geometry.intersection(box(*bbox))
         for i, part in enumerate(sorted(parts(clipped,'Polygon'),key=lambda p:shapely.normalize(p).wkb_hex)):
-            f = encode_polygon(part,bid+':'+str(i),wgs,local)
+            f = encode_polygon(part,bid+':'+str(i),wgs,local,metrics)
             f.update(building_id=bid,source_feature_id=sid,attributes=record,**height_policy(bid,floor_height_m))
             f['clipped_to_aoi'] = not geometry.equals(clipped)
             features.append(f)

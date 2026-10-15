@@ -42,6 +42,8 @@ class BuildingTests(unittest.TestCase):
             self.assertTrue(p.is_valid and not p.is_empty and p.area>0)
             self.assertGreaterEqual(len(v),3)
             self.assertGreater(len(f['triangles']),0)
+            self.assertLess(abs(f['area_local_m2']/f['area_utm_m2']-1),0.002)
+            self.assertLess(abs(f['triangulated_area_local_m2']-f['area_local_m2']),1e-6)
 
     def test_05_bounded_area(self):
         a=box(*self.manifest['area_bbox_m'])

@@ -20,6 +20,7 @@ ABuildingBlockoutActor::ABuildingBlockoutActor()
 
 bool ABuildingBlockoutActor::Reload(FString& Error)
 {
+	const double TotalStart=FPlatformTime::Seconds();
 	if (!GetActorTransform().Equals(FTransform::Identity)) { Error=TEXT("Building actor must preserve geographic identity transform"); return false; }
 	FBuildingFootprintData Candidate;
 	FBuildingMeshMetrics NewMetrics;
@@ -30,11 +31,16 @@ bool ABuildingBlockoutActor::Reload(FString& Error)
 	if (!Material) { Error=TEXT("Required existing Engine unlit material unavailable"); return false; }
 	Buildings->SetMaterial(0,Material);
 	Buildings->SetVertexColorSpaceTransformMode(EDynamicMeshVertexColorTransformMode::NoTransform);
-	const double CollisionStart=FPlatformTime::Seconds();
+	const double ComponentStart=FPlatformTime::Seconds();
+	Buildings->SetTransientDeferCollisionUpdates(true);
 	Buildings->SetMesh(MoveTemp(Mesh));
+	ComponentMilliseconds=(FPlatformTime::Seconds()-ComponentStart)*1000;
+	const double CollisionStart=FPlatformTime::Seconds();
+	Buildings->SetTransientDeferCollisionUpdates(false);
 	Buildings->SetComplexAsSimpleCollisionEnabled(true,true);
 	CollisionMilliseconds=(FPlatformTime::Seconds()-CollisionStart)*1000;
 	Data=MoveTemp(Candidate); Metrics=NewMetrics;
+	TotalMilliseconds=(FPlatformTime::Seconds()-TotalStart)*1000;
 	LogStatus();
 	return true;
 }
@@ -55,8 +61,8 @@ void ABuildingBlockoutActor::LogStatus() const
 	}
 	UE_LOG(LogMontevideoBuildings,Display,TEXT("Buildings: %d buildings, %d footprints; heights official=%d derived=%d synthetic=%d; min/mean/max=%.3f/%.3f/%.3f m; vertices=%d triangles=%d walls=%d roofs=%d; dataset=%s"),
 		Data.BuildingCount,Data.Footprints.Num(),Official,Derived,Synthetic,Seen.IsEmpty()?0:Min,Seen.IsEmpty()?0:Sum/Seen.Num(),Max,Metrics.Vertices,Metrics.Triangles,Metrics.WallTriangles,Metrics.RoofTriangles,*Data.Dataset);
-	UE_LOG(LogMontevideoBuildings,Display,TEXT("Buildings metrics: JSON+IO+checksum=%.3f ms; conversion=%.3f ms; mesh=%.3f ms; component+collision=%.3f ms; mesh payload estimate=%lld bytes (excludes adjacency/allocator/collision/GPU); bounds cm [%s] to [%s]. SYNTHETIC HEIGHTS, Z=0 development support."),
-		Data.LoadMetrics.JsonMilliseconds,Data.LoadMetrics.ConversionMilliseconds,Metrics.GenerationMilliseconds,CollisionMilliseconds,Metrics.ApproximateMeshBytes,*Metrics.Bounds.Min.ToString(),*Metrics.Bounds.Max.ToString());
+	UE_LOG(LogMontevideoBuildings,Display,TEXT("Buildings metrics: read=%.3f ms; parse=%.3f ms; checksum=%.3f ms; conversion=%.3f ms; extrusion=%.3f ms; mesh-component=%.3f ms; collision=%.3f ms; total=%.3f ms; mesh payload estimate=%lld bytes (excludes adjacency/allocator/collision/GPU); bounds cm [%s] to [%s]. SYNTHETIC HEIGHTS, Z=0 development support."),
+		Data.LoadMetrics.ReadMilliseconds,Data.LoadMetrics.ParseMilliseconds,Data.LoadMetrics.ChecksumMilliseconds,Data.LoadMetrics.ConversionMilliseconds,Metrics.GenerationMilliseconds,ComponentMilliseconds,CollisionMilliseconds,TotalMilliseconds,Metrics.ApproximateMeshBytes,*Metrics.Bounds.Min.ToString(),*Metrics.Bounds.Max.ToString());
 }
 
 void ABuildingBlockoutActor::ShowBounds() const

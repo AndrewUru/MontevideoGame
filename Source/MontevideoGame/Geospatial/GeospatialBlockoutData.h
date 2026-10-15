@@ -31,7 +31,9 @@ struct FGeospatialBlockoutData
 
 struct FGeospatialLoadMetrics
 {
-	double JsonMilliseconds = 0;
+	double ReadMilliseconds = 0;
+	double ParseMilliseconds = 0;
+	double ChecksumMilliseconds = 0;
 	double ConversionMilliseconds = 0;
 };
 
