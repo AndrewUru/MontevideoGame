@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "Engine/Engine.h"
 #include "Components/DynamicMeshComponent.h"
+#include "Components/InstancedStaticMeshComponent.h"
 #include "DynamicMesh/DynamicMeshAttributeSet.h"
 #include "Algo/Reverse.h"
 #include <limits>
@@ -157,14 +158,30 @@ bool FFacadeRuntimeTest::RunTest(const FString&)
 	auto* Mass=World->SpawnActor<ABuildingBlockoutActor>();auto* Facade=World->SpawnActor<AFacadeBlockoutActor>();
 	if(!Mass->Reload(Error)||!Facade->Initialize(Mass,Error)) { AddError(Error);GEngine->DestroyWorldContext(World);World->DestroyWorld(false);return false; }
 	const int32 Count=Facade->GetMetrics().Triangles;const FBuildingFacadeData Original=Facade->GetLayout();
-	TestTrue(TEXT("Reload succeeds"),Facade->Reload(Error));TestEqual(TEXT("No accumulated triangles"),Facade->GetMetrics().Triangles,Count);
+	TestTrue(TEXT("Reload succeeds"),Facade->Reload(Error));TestEqual(TEXT("No accumulated unique triangles"),Facade->GetMetrics().Triangles,Count);
 	TestTrue(TEXT("Reload identical layout"),FacadeTests::Same(Original,Facade->GetLayout()));
-	TArray<UDynamicMeshComponent*> Components;Facade->GetComponents(Components);TestEqual(TEXT("One aggregate component"),Components.Num(),1);
-	TestEqual(TEXT("Decorations do not collide"),Components[0]->GetCollisionEnabled(),ECollisionEnabled::NoCollision);
+	TArray<UInstancedStaticMeshComponent*> Components;Facade->GetComponents(Components);
+	TestEqual(TEXT("Component pool matches metric"),Components.Num(),Facade->GetMetrics().Components);
+	int32 TotalInstances=0;
+	for(auto* Component:Components) { TotalInstances+=Component->GetInstanceCount();TestEqual(TEXT("Decorations do not collide"),Component->GetCollisionEnabled(),ECollisionEnabled::NoCollision); }
+	TestEqual(TEXT("Every element instanced once"),TotalInstances,Facade->GetLayout().Elements.Num());
+	TestTrue(TEXT("Legacy data and transforms match"),Facade->CompareLegacy(Error));
+	for(int32 Repeat=0;Repeat<3;++Repeat)
+	{
+		TestTrue(TEXT("Repeated reload"),Facade->Reload(Error));
+		TArray<UInstancedStaticMeshComponent*> Current;Facade->GetComponents(Current);
+		TestEqual(TEXT("No duplicated components"),Current.Num(),Components.Num());
+		int32 Instances=0;for(auto* C:Current) { Instances+=C->GetInstanceCount(); }
+		TestEqual(TEXT("No duplicated instances"),Instances,TotalInstances);
+	}
 	TArray<UDynamicMeshComponent*> MassComponents;Mass->GetComponents(MassComponents);TestTrue(TEXT("Massing retains collision"),MassComponents[0]->GetCollisionEnabled()!=ECollisionEnabled::NoCollision);
 	TestTrue(TEXT("Override supported"),Facade->Reload(Error,1));TestEqual(TEXT("All modern"),Facade->GetLayout().StyleBuildings[1],9);
 	TestFalse(TEXT("Invalid override rejected"),Facade->Reload(Error,9));TestEqual(TEXT("Old override remains"),Facade->GetLayout().StyleBuildings[1],9);
 	TestTrue(TEXT("Reset seed styles"),Facade->Reload(Error));TestTrue(TEXT("Reset deterministic"),FacadeTests::Same(Original,Facade->GetLayout()));
-	Mass->Destroy();TestFalse(TEXT("Missing mass rejected"),Facade->Reload(Error));GEngine->DestroyWorldContext(World);World->DestroyWorld(false);return true;
+	TestTrue(TEXT("Reset parity"),Facade->CompareLegacy(Error));
+	Mass->Destroy();TestFalse(TEXT("Missing mass rejected"),Facade->Reload(Error));
+	Facade->Destroy();
+	for(auto* Component:Components) { TestFalse(TEXT("Facade instance component unregisters with actor"),Component->IsRegistered()); }
+	GEngine->DestroyWorldContext(World);World->DestroyWorld(false);return true;
 }
 #endif

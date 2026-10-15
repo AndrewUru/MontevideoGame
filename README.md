@@ -42,7 +42,7 @@ The project is intentionally developed in small, validated milestones instead of
 
 Current milestone:
 
-# M3.3 — Procedural facade system
+# M3.3.1 — Facade optimization
 
 Completed:
 M0    Repository architecture              ✅
@@ -52,7 +52,8 @@ M2.5  Official data provenance pipeline    ✅
 M3    Runtime urban blockout                ✅ User visually validated
 M3.1  Dedicated MVD_Prototype world          ✅ User visually validated
 M3.2  Building generator proof of concept    ✅ User visually validated
-M3.3  Procedural facade system                 Implemented; visual acceptance pending
+M3.3  Procedural facade system                 ✅ User visually validated
+M3.3.1 Facade optimization                      Implementation and technical validation; visual acceptance pending
 
 Not started:
 M4    Driveable vehicle
@@ -568,12 +569,12 @@ Current M3 limitations:
 - No police
 - No missions
 - Minimal prototype map; no production world streaming
-- M3/M3.1/M3.2 visually validated; M3.3 façades await user acceptance
+- M3/M3.1/M3.2/M3.3 visually validated; optimized M3.3.1 façades await user acceptance
 - City-scale streaming has not yet been introduced
 Next validation step
-Inspect MVD_Prototype in Play and accept or reject the M3.3 procedural façades.
+Inspect MVD_Prototype in Play and accept or reject the M3.3.1 facade optimization.
 "Construcciones notables" is a limited official dataset, not complete urban building coverage.
-M3.3 is authorized; M3.4 and M4 are not authorized.
+M3.3 was visually validated. M3.3.1 reuses transient runtime mesh modules through ISM batches. Its visual acceptance is pending. M3.4 and M4 are not authorized.
 
 Documentation
 Detailed technical documentation:
@@ -588,6 +589,7 @@ Detailed technical documentation:
 - [M3.1 project world](docs/M3_1_PROJECT_WORLD.md)
 - [M3.2 building generator proof of concept](docs/M3_2_BUILDING_GENERATOR.md)
 - [M3.3 procedural facades](docs/M3_3_PROCEDURAL_FACADES.md)
+- [M3.3.1 facade optimization](docs/M3_3_1_FACADE_OPTIMIZATION.md)
 Disclaimer
 MontevideoGame is an independent game-development and engineering prototype.
 It is not affiliated with, endorsed by, or connected to Rockstar Games or the Grand Theft Auto franchise.

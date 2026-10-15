@@ -1,6 +1,6 @@
 # M3.3 — Procedural Facade System
 
-**Autorizado por el usuario tras aceptar visualmente M3.1/M3.2. La aceptación visual de M3.3 está pendiente. No autoriza M3.4 ni M4.**
+**M3.3 fue validado técnica y visualmente por el usuario al autorizar M3.3.1. Las métricas de esta página son la baseline anterior a la optimización.** Véase [M3.3.1](M3_3_1_FACADE_OPTIMIZATION.md). M3.4 y M4 no están autorizados.
 
 Las fachadas son una demostración procedural de presentación. Classic, Modern, Residential y Civic son estilos **genéricos y sintéticos**; no representan una clasificación verificada de Montevideo. “Construcciones notables” sigue siendo una fuente oficial parcial: 9 edificios / 12 footprints, no cobertura urbana completa. No se consultan fuentes nuevas ni se modifican datos GIS, alturas o footprints.
 
