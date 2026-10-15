@@ -109,7 +109,8 @@ bool FFacadeLayoutGenerator::Build(const FBuildingFootprintData& Source,FBuildin
 	for(int32 I=0;I<Data.Segments.Num();++I)
 	{
 		const auto& S=Data.Segments[I];if(S.Bays<1) { continue; }
-		const double Center=S.Length/2;
+		const double Bay=(S.Length-2*S.Margin)/S.Bays;
+		const double Center=S.Margin+(S.Bays/2+.5)*Bay;
 		if(!IsClear(Source,S,Center-90,Center+90,2,10)) { continue; }
 		const int32* Previous=DoorSegments.Find(S.BuildingId);
 		if(!Previous || S.Length>Data.Segments[*Previous].Length) { DoorSegments.Add(S.BuildingId,I); }
@@ -124,7 +125,7 @@ bool FFacadeLayoutGenerator::Build(const FBuildingFootprintData& Source,FBuildin
 		const auto& S=Data.Segments[I];const auto Def=Style(S.Style);const uint32 Seed=Source.Footprints[S.Footprint].Seed;
 		const double SkinMargin=FMath::Min(2.0,S.Length*.2);
 		// Thin presentation skin leaves the original solid, coordinates and collision untouched.
-		if(IsClear(Source,S,SkinMargin,S.Length-SkinMargin,.5,1))
+		if(IsClear(Source,S,SkinMargin,S.Length-SkinMargin,.5,1.7))
 		{
 			Add(I,0,EFacadePiece::Wall,SkinMargin,S.Length-SkinMargin,.5,1,1,S.Height,Def.Color);
 			FVector4f Ground=Def.Color*.65f;Ground.W=1;
