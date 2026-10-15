@@ -1,0 +1,187 @@
+{
+  "engine": "5.8.3 CL58210709",
+  "build": {
+    "target": "MontevideoGameEditor Win64 Development",
+    "result": "Succeeded",
+    "exit_code": 0,
+    "total_execution_seconds": 60.38
+  },
+  "automation": {
+    "reportCreatedOn": "2026.10.14-18.37.15",
+    "succeeded": 14,
+    "succeededWithWarnings": 0,
+    "failed": 0,
+    "notRun": 0
+  },
+  "tests": [
+    {
+      "name": "Montevideo.Geospatial.01Origin",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.02RoundTrip",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.03KnownNorth",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.04KnownEast",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.05Altitude",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.06UrbanStability",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.07InvalidCoordinates",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.08DomainPolesDateline",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.Geospatial.09SubsystemLifecycle",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.M3.01OfficialGeometry",
+      "state": "Success",
+      "evidence": [
+        "Plaza area 15852.597786 m2; local bounds X=-5240.781 Y=-8853.443 Z=0.000 to X=5200.507 Y=8985.868 Z=0.000; size 104.412887 x 178.393108 m"
+      ]
+    },
+    {
+      "name": "Montevideo.M3.02OriginAxesScale",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.M3.03RejectCorruptOrInvertedData",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.M3.04RejectRadiusAndAxes",
+      "state": "Success",
+      "evidence": []
+    },
+    {
+      "name": "Montevideo.M3.05CollisionAndReload",
+      "state": "Success",
+      "evidence": [
+        "Collision hit=1 component=OfficialPolygons position=X=0.000 Y=0.000 Z=0.000 normal=X=0.000 Y=0.000 Z=1.000"
+      ]
+    }
+  ],
+  "python": {
+    "tests": 5,
+    "passed": 5,
+    "two_builds_identical": true,
+    "raw_and_content_unchanged": true
+  },
+  "integrity": {
+    "existing_assets_checked": 753,
+    "existing_raw_files_checked": 6,
+    "existing_files_unchanged": true,
+    "new_sources_have_sha256_manifests": true,
+    "git_data_filters_preserve_bytes": true,
+    "raw_index_blobs_match_working_originals": true,
+    "git_storage_correction": "Four previously normalized raw text blobs staged with original unchanged bytes; existing Unreal LFS rules preserved; no commit created by agent.",
+    "raw_whitespace_notes": "git diff --cached --check reports original CRLF/trailing spaces in preserved raw bodies. Intentionally not reformatted; code/documentation check excluding raw passes."
+  },
+  "standalone": {
+    "exit_code": 0,
+    "map": "/Engine/Maps/Entry",
+    "gamemode": "MontevideoBlockoutGameMode",
+    "loaded_counts": {
+      "polygons": 67,
+      "lines": 160,
+      "vertices": 4121,
+      "triangles": 2579
+    },
+    "spawn_check": {
+      "exit_code": 0,
+      "pawn": "/Engine/Maps/Entry.Entry:PersistentLevel.BP_ThirdPersonCharacter_C_0",
+      "log_sha256": "5711e3b29aff28b789f7cf58e0be3cdaf820437fe10a1a53ee7ba4eec951c287"
+    }
+  },
+  "visual_acceptance": "PENDING_USER",
+  "logs": {
+    "build.log": {
+      "sha256": "bf4b0d7e7cb68723d7c6daf57d86ffdcc132815377bf98aba373d61d0562285b",
+      "condition_failed_count": 0,
+      "warnings": [
+        "Warning: Visual Studio compiler 14.51.36260 is not a preferred version",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\GeometryFramework\\Public\\Components\\BaseDynamicMeshComponent.h(678,51): warning C4996: 'UMeshComponent::GetMaterialRelevance': Please use GetMaterialRelevance with EShaderPlatform argument and not ERHIFeatureLevel::Type - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Sphere.h(74,17): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Convex.h(207,17): warning C4996: 'Chaos::FImplicitObject::GetMargin': Please use GetMarginf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Convex.h(212,17): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Plane.h(42,16): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Box.h(104,17): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\GeometryFramework\\Public\\Components\\BaseDynamicMeshComponent.h(678,51): warning C4996: 'UMeshComponent::GetMaterialRelevance': Please use GetMaterialRelevance with EShaderPlatform argument and not ERHIFeatureLevel::Type - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Sphere.h(74,17): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Convex.h(207,17): warning C4996: 'Chaos::FImplicitObject::GetMargin': Please use GetMarginf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Convex.h(212,17): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Plane.h(42,16): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.",
+        "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source\\Runtime\\Experimental\\Chaos\\Public\\Chaos\\Box.h(104,17): warning C4996: 'Chaos::FImplicitObject::GetRadius': Please use GetRadiusf instead. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile."
+      ],
+      "errors": []
+    },
+    "tests.log": {
+      "sha256": "c90cc41c73775388319f4a216d546bc75f2cddaabd41f75ca59d7923e9198416",
+      "condition_failed_count": 14,
+      "warnings": [],
+      "errors": []
+    },
+    "standalone.log": {
+      "sha256": "45e2e086f8a5a83a761d6d0fc8dd4664aa2f2f5565a7125ade739c378601d496",
+      "condition_failed_count": 0,
+      "warnings": [
+        "[2026.10.14-18.39.43:986][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'ActorLayersWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:986][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'AlertWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:986][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'AlertHeaderWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:986][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'UObjectLabelWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:986][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'FolderCompatibilityWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:987][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'DiskSizeWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'AssetDataItemTypeWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'AssetDataLabelWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'AssetDataVirtualPathWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'AssetNameWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'DynamicAssetDataColumnBaseWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'DynamicAssetDataColumnBaseWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'DynamicAssetDataColumnBaseWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'DynamicAssetDataColumnBaseWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'DynamicAssetDataColumnBaseWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:988][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'StaticMeshTrianglesWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:989][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'OutlinerUnsavedWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:989][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'OutlinerUnsavedHeaderConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:989][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'SocketWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:989][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'TypeInfoWidgetConstructor' as purpose '0' isn't registered.",
+        "[2026.10.14-18.39.43:989][  0]LogEditorDataStorageUI: Warning: Unable to register widget factory 'VisibilityWidgetConstructor' as purpose '0' isn't registered."
+      ],
+      "errors": []
+    }
+  },
+  "processed_hashes": {
+    "Data/processed/montevideo/m3/blocks.json": "cde21229589a22f054f724b5e6d1869540873e6a8e68be9c2fa338ea00fdf8ca",
+    "Data/processed/montevideo/m3/manifest.json": "cced527947c92b0673b0551ea6816ab8bad7d9e723e7dc8260d4e611251f4c41",
+    "Data/processed/montevideo/m3/plaza_independencia.json": "718d190c543598c56a62a3d55ca9a5c823df0a442f6e4d3e4783d6acc3c00934",
+    "Data/processed/montevideo/m3/roads.json": "1f01da6f6ee981134d86d7e01fe6f1c81f96e221058caad83344edfc45a68fe0"
+  }
+}

@@ -4,6 +4,7 @@ import io
 import json
 import math
 import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 import zipfile
 
@@ -56,7 +57,17 @@ def parts(geometry, kind):
     return []
 
 
-def build(source_path=SOURCE):
+def build(source_path=SOURCE, processed_at_utc=None):
+    # UTC is an explicit reproducible build parameter, never silently replaced by wall-clock time.
+    if processed_at_utc is None:
+        existing = OUTPUT / 'manifest.json'
+        if not existing.exists():
+            raise ValueError('First build requires --processed-at-utc; rebuilds preserve the recorded processing date')
+        processed_at_utc = json.loads(existing.read_text(encoding='utf-8'))['processed_at_utc']
+    instant = datetime.fromisoformat(processed_at_utc)
+    if instant.tzinfo is None or instant.utcoffset().total_seconds() != 0:
+        raise ValueError('Processing date must explicitly use UTC')
+    processed_at_utc = instant.astimezone(timezone.utc).isoformat()
     pyproj.network.set_network_enabled(False)
     source = verify_snapshot(source_path)
     plaza = build_derivative()
@@ -148,8 +159,8 @@ def build(source_path=SOURCE):
     files = {name: serialize(data) for name, data in outputs.items()}
     manifest = {
         'schema_version': 1, 'pipeline_version': 'm3-1', 'crs': 'EPSG:4326',
-        'processed_at_utc': max(d['downloaded_at_utc'] for d in source['datasets']),
-        'processing_date_policy': 'Fixed to newest input acquisition UTC for deterministic rebuilds; not wall-clock run time.',
+        'processed_at_utc': processed_at_utc,
+        'processing_date_policy': 'Explicit UTC build parameter recorded when processing the batch; subsequent rebuilds preserve it. Not refreshed implicitly.',
         'origin_source': DEFAULT_OUTPUT.relative_to(ROOT).as_posix(), 'origin_sha256': digest(DEFAULT_OUTPUT.read_bytes()),
         'origin_sha1': hashlib.sha1(DEFAULT_OUTPUT.read_bytes()).hexdigest(),
         'source': source_path.relative_to(ROOT).as_posix(), 'source_sha256': digest(source_path.read_bytes()),
@@ -172,8 +183,9 @@ def build(source_path=SOURCE):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, default=SOURCE)
+    parser.add_argument('--processed-at-utc', help='Explicit processing batch date, UTC ISO8601; preserve existing manifest date if omitted')
     args = parser.parse_args()
-    files = build(args.source.resolve())
+    files = build(args.source.resolve(), args.processed_at_utc)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     for name, data in files.items():
         (OUTPUT / name).write_bytes(data)
