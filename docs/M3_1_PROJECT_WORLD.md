@@ -42,3 +42,9 @@ SHA-256: `3e4b66253e8e90afc5b4c24c7bd53f19d1bc0730fb1e206c8b290230338578da`.
 5. Detener Play retira la geometría runtime. No usar “Keep Simulation Changes” ni guardar geometría del PIE en el mapa.
 
 La aceptación visual de M3.2 corresponde al usuario; no se avanza a M3.3/M4.
+
+## Cierre de validación técnica (2026-10-15)
+
+La inspección oficial con UnrealEditor-Cmd y Python terminó con **exit 0**. Confirmó la ruta y el GameMode indicados arriba, y **cero actores editables**. El mundo cargado contiene WorldSettings, Brush_0, BuoyancyManager_0, DefaultPhysicsVolume_0, GameplayDebuggerPlayerManager_0 y AbstractNavData-Default. Esta enumeración incluye gestores que Unreal instancia al cargar el mundo; no debe interpretarse como seis actores de gameplay colocados manualmente o como prueba de que todos se serializan en el mapa. No aparecen edificios ni GIS persistentes. El script de inspección no guarda el nivel.
+
+Comparación SHA-256 contra el inventario anterior a M3.1: **753 assets antiguos intactos, cero modificados, cero eliminados**; también permanecen intactos los 18 archivos de datos anteriores inventariados. El único asset nuevo es el mapa autorizado. Evidencia local: `Saved/M3_2/world-audit.json` y `Saved/M3_2/asset-integrity.json` (productos de validación no versionados).

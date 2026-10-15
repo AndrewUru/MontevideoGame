@@ -110,11 +110,41 @@ Python cubre inmutabilidad raw, PRJ/CRS, IDs, geometrías no vacías/válidas, A
 
 La inspección visual final sigue pendiente. Los tests físicos no sustituyen una comprobación de movimiento y render en Play.
 
+### Resultado final comprobado — 2026-10-15
+
+- UE **5.8.3**, instalación descubierta mediante EngineAssociation y registro: `C:/Program Files/Epic Games/UE_5.8`. Target `MontevideoGameEditor Win64 Development`: **Result: Succeeded; exit code 0; 69,76 s**.
+- Python: **21/21 correctas**, 14,146 s, sin omisiones. Incluye suites anteriores y edificios. Auditoría adicional: dos reconstrucciones byte-idénticas a los derivados existentes, sin modificar Data.
+- Unreal: **21/21 correctas**, 0 con warnings, 0 fallidas, 0 no ejecutadas; proceso exit 0. Desglose: Geospatial 9, DataProvenance 1 (centroide real pasado por argumentos), M3 6 y Buildings 5. Se comprobó el reporte exportado, no solamente el código de salida.
+- Raycast de cubierta con normal +Z, raycast lateral, huecos/espacios vacíos, bloqueo por pared de una cápsula ACharacter, bases, normales de render, grupos y recargas: correctos. La auditoría detectó y corrigió una doble inversión: `VectorUtil::Normal` ya usa la convención de Unreal. El test comprueba las normales por esquina de los 2.076 triángulos.
+- Standalone `-game -nullrhi`: **exit 0**, carga MVD_Prototype por defecto, instancia `BP_ThirdPersonCharacter_C_0` y genera 9 edificios/12 footprints. Esto comprueba arranque y geometría runtime, no apariencia renderizada.
+- Cero geometrías inválidas descartadas. La única entidad excluida es Puerto de Montevideo (`106188057`), sin intersección superficial con el AOI exacto. La tabla de footprints y las tolerancias anteriores documentan el resto.
+- Warnings de compilación conocidos: MSVC 14.51.36260 no preferido (UE recomienda 14.50.35717); C4996 en headers del Engine: GetMovementBase, GetMaterialRelevance, GetRadius y GetMargin. No quedan warnings atribuidos al código nuevo ni se suprimieron diagnósticos.
+- El arranque de Automation registra 14 mensajes `Condition failed` anteriores a la suite Montevideo; se conservan como incidencia del arranque del Engine, separada del reporte 21/21. El standalone registra 21 warnings de fábricas de widgets `LogEditorDataStorageUI`, sin errores. No se afirma que todos los logs del Engine estén limpios.
+
+Evidencia local no versionada: `Saved/M3_2/build.log`, `python-tests.log`, `Automation/index.json`, `tests.log`, `standalone.log`, `geometry-audit.json`, `world-audit.json` y `asset-integrity.json`.
+
 ## Performance
 
 La triangulación ocurre offline; el runtime no la repite. Los contadores separan lectura de archivos, checksum, decodificación/parseo JSON, conversión geográfica, extrusión de FDynamicMesh3, asignación al componente y cocción de colisión. El tiempo total incluye validación, material y otros costes; no es solo la suma de esos contadores. El loader de edificios reutiliza el loader geográfico y vuelve a leer metadata: ese coste real se incluye, no se oculta.
 
 La memoria informada es una **estimación de payload CPU** de posiciones, índices, grupos y overlays; excluye capacidad reservada, adyacencia, objetos, colisión y GPU. No se presenta como memoria total del proceso ni VRAM. No se ha optimizado prematuramente.
+
+Medición final de una carga standalone headless en esta máquina (no benchmark estadístico ni medición de GPU):
+
+| Etapa | Tiempo ms |
+| --- | ---: |
+| Lectura JSON | 3,363 |
+| Decodificación/parseo JSON | 36,199 |
+| Checksum | 0,359 |
+| Conversión geográfica | 0,148 |
+| Extrusión | 18,870 |
+| Asignación/creación mesh del componente | 0,172 |
+| Creación de colisión | 8,422 |
+| Total runtime de edificios | **71,410** |
+| Triangulación offline (incluye comprobación de cobertura y bordes) | 128,794 |
+| Pipeline offline completo | 346,673 |
+
+La triangulación offline no se suma al tiempo runtime. Payload estimado: **282.672 bytes (~276 KiB)** para 1.052 vértices/2.076 triángulos. Bounds cm: `(-33897.772, -35086.237, 0)` a `(34837.557, 4752.758, 1500)`.
 
 ## Limitaciones y deuda
 
