@@ -7,6 +7,7 @@
 #include "Misc/AutomationTest.h"
 #include "Misc/Paths.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
 #include "Components/DynamicMeshComponent.h"
 #include "DynamicMesh/DynamicMeshAttributeSet.h"
 #include "Algo/Reverse.h"
@@ -152,8 +153,9 @@ bool FFacadeRuntimeTest::RunTest(const FString&)
 	UWorld::InitializationValues Values;Values.AllowAudioPlayback(false).CreatePhysicsScene(true).CreateNavigation(false).CreateAISystem(false).ShouldSimulatePhysics(false);
 	UWorld* World=UWorld::CreateWorld(EWorldType::Game,false,NAME_None,nullptr,true,ERHIFeatureLevel::Num,&Values);
 	if(!World) { return false; }FString Error;
+	GEngine->CreateNewWorldContext(EWorldType::Game).SetCurrentWorld(World);
 	auto* Mass=World->SpawnActor<ABuildingBlockoutActor>();auto* Facade=World->SpawnActor<AFacadeBlockoutActor>();
-	if(!Mass->Reload(Error)||!Facade->Initialize(Mass,Error)) { AddError(Error);World->DestroyWorld(false);return false; }
+	if(!Mass->Reload(Error)||!Facade->Initialize(Mass,Error)) { AddError(Error);GEngine->DestroyWorldContext(World);World->DestroyWorld(false);return false; }
 	const int32 Count=Facade->GetMetrics().Triangles;const FBuildingFacadeData Original=Facade->GetLayout();
 	TestTrue(TEXT("Reload succeeds"),Facade->Reload(Error));TestEqual(TEXT("No accumulated triangles"),Facade->GetMetrics().Triangles,Count);
 	TestTrue(TEXT("Reload identical layout"),FacadeTests::Same(Original,Facade->GetLayout()));
@@ -163,6 +165,6 @@ bool FFacadeRuntimeTest::RunTest(const FString&)
 	TestTrue(TEXT("Override supported"),Facade->Reload(Error,1));TestEqual(TEXT("All modern"),Facade->GetLayout().StyleBuildings[1],9);
 	TestFalse(TEXT("Invalid override rejected"),Facade->Reload(Error,9));TestEqual(TEXT("Old override remains"),Facade->GetLayout().StyleBuildings[1],9);
 	TestTrue(TEXT("Reset seed styles"),Facade->Reload(Error));TestTrue(TEXT("Reset deterministic"),FacadeTests::Same(Original,Facade->GetLayout()));
-	Mass->Destroy();TestFalse(TEXT("Missing mass rejected"),Facade->Reload(Error));World->DestroyWorld(false);return true;
+	Mass->Destroy();TestFalse(TEXT("Missing mass rejected"),Facade->Reload(Error));GEngine->DestroyWorldContext(World);World->DestroyWorld(false);return true;
 }
 #endif

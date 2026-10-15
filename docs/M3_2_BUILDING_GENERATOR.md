@@ -1,6 +1,6 @@
 # M3.2 — Procedural Building Generator proof of concept
 
-**Estado: implementación y validación técnica; aceptación visual pendiente del usuario. No autoriza M3.3 ni M4.**
+**Estado: validado técnica y visualmente por el usuario al autorizar M3.3. El cierre técnico y las instrucciones siguientes conservan el registro de M3.2. M4 no está autorizado.**
 
 > **LIMITATION:**
 > "Construcciones notables" is not a complete building footprint dataset.

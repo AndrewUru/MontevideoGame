@@ -35,3 +35,7 @@ Los eventos de incidentes y objetivos usarán IDs estables, contexto espacial co
 - Un mismo incidente no se contabiliza dos veces; búsqueda y misiones se prueban sin UI.
 - Guardar/cargar restaura progreso con entidades ausentes y esquema versionado.
 - Conversión geográfica y streaming se verifican por separado y después juntos.
+
+## Presentación de edificios M3.3
+
+M3.1/M3.2 están aceptados visualmente. M3.3 añade FFacadeLayoutGenerator y FFacadeMeshGenerator puros, compuestos por AFacadeBlockoutActor desde los datos locales del massing. No implementa gameplay nuevo: puertas y ventanas son opacas y decorativas; balcones sin colisión. La colisión sigue en ABuildingBlockoutActor, con Third Person intacto. GameMode crea un actor agregado adicional; no hay un actor por módulo ni subsystem global. Contratos y validación pendiente en [M3_3_PROCEDURAL_FACADES.md](M3_3_PROCEDURAL_FACADES.md).

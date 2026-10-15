@@ -97,7 +97,7 @@ bool FFacadeLayoutGenerator::Build(const FBuildingFootprintData& Source,FBuildin
 			S.Height=B.HeightMeters*100; S.Margin=75;
 			S.Bays=FMath::Max(0,FMath::FloorToInt((S.Length-2*S.Margin)/StyleDef.BayWidth));
 			if(S.Bays==0) { ++Data.ShortEdges; }
-			if(S.Bays>1000 || Data.Segments.Num()>10000) { return false; }
+			if(S.Bays>1000 || Data.Segments.Num()>=10000) { return false; }
 			const double Ground=B.Floors==1?S.Height:Average*StyleDef.GroundRatio;
 			S.FloorZ.Add(0);for(int32 Floor=1;Floor<B.Floors;++Floor) { S.FloorZ.Add(Ground+(Floor-1)*(S.Height-Ground)/(B.Floors-1)); } S.FloorZ.Add(S.Height);
 			Data.Bays+=S.Bays;Data.Segments.Add(MoveTemp(S));
@@ -115,8 +115,10 @@ bool FFacadeLayoutGenerator::Build(const FBuildingFootprintData& Source,FBuildin
 		const int32* Previous=DoorSegments.Find(S.BuildingId);
 		if(!Previous || S.Length>Data.Segments[*Previous].Length) { DoorSegments.Add(S.BuildingId,I); }
 	}
+	bool BudgetExceeded=false;
 	auto Add=[&](int32 Segment,int32 Floor,EFacadePiece Kind,double U0,double U1,double D0,double D1,double Z0,double Z1,FVector4f Color)
 	{
+		if(Data.Elements.Num()>=100000) { BudgetExceeded=true;return; }
 		FFacadeElement E;E.Segment=Segment;E.Floor=Floor;E.Kind=Kind;E.U0=U0;E.U1=U1;E.D0=D0;E.D1=D1;E.Z0=Z0;E.Z1=Z1;E.Color=Color;Data.Elements.Add(E);
 	};
 	const FVector4f Dark(.025f,.045f,.065f,1),Trim(.72f,.70f,.61f,1),Rail(.10f,.12f,.14f,1);
@@ -167,7 +169,7 @@ bool FFacadeLayoutGenerator::Build(const FBuildingFootprintData& Source,FBuildin
 				else { ++Data.RejectedDecorations; }
 			}
 		}
-		if(Data.Elements.Num()>100000) { return false; }
+		if(BudgetExceeded) { return false; }
 	}
 	Data.LayoutMilliseconds=(FPlatformTime::Seconds()-Start)*1000;Out=MoveTemp(Data);Error.Reset();return true;
 }
